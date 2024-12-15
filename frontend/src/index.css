@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.fruit-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.fruit-gradient {
+  background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+}
+
+.tropical-gradient {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.berries-gradient {
+  background: linear-gradient(135deg, #ff6b6b, #ff758c);
+}
+
+.core-gradient {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+}
+
+.exotic-gradient {
+  background: linear-gradient(135deg, #fa709a, #fee140);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
