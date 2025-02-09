@@ -12,7 +12,7 @@ export const Login = () => {
     e.preventDefault();
     // Handle login logic here
     const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URLL}/api/auth/login`,
+      `${process.env.REACT_APP_API_BASE_URL}/api/auth/login`,
       {
         user_email: email,
         user_password: password,

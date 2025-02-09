@@ -68,7 +68,7 @@ export const Cart = () => {
   const handleCheckout = async () => {
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URLL}/create-order`,
+        `${process.env.REACT_APP_API_BASE_URL}/create-order`,
         {
           amount: float2int(state.total.toFixed(2)) * 100,
           currency: "INR",
@@ -85,7 +85,7 @@ export const Cart = () => {
         handler: async function (response: any) {
           try {
             await axios.post(
-              `${process.env.REACT_APP_API_BASE_URLL}/verify-payment`,
+              `${process.env.REACT_APP_API_BASE_URL}/verify-payment`,
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,

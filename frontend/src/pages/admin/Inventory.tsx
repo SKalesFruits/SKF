@@ -41,7 +41,7 @@ export const Inventory: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URLL}/api/products`
+        `${process.env.REACT_APP_API_BASE_URL}/api/products`
       );
       setProducts(response.data);
       setError(null);
@@ -73,7 +73,7 @@ export const Inventory: React.FC = () => {
   const addProduct = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URLL}/api/products`,
+        `${process.env.REACT_APP_API_BASE_URL}/api/products`,
         newProduct
       );
       setProducts([...products, { ...newProduct, _id: response.data.id }]);
@@ -103,7 +103,7 @@ export const Inventory: React.FC = () => {
 
     try {
       await axios.put(
-        `${process.env.REACT_APP_API_BASE_URLL}/api/products/${selectedProduct._id}`,
+        `${process.env.REACT_APP_API_BASE_URL}/api/products/${selectedProduct._id}`,
         selectedProduct
       );
 
@@ -123,7 +123,7 @@ export const Inventory: React.FC = () => {
   const deleteProduct = async (id: string) => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_API_BASE_URLL}/api/products/${id}`
+        `${process.env.REACT_APP_API_BASE_URL}/api/products/${id}`
       );
       setProducts(products.filter((product) => product._id !== id));
     } catch (err) {
