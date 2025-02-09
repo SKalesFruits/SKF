@@ -25,8 +25,8 @@ export const SocialMediaSection = () => {
         </h2>
 
         <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <VideoEmbed videoId="dQw4w9WgXcQ" />
-          <InstagramEmbed postId="EXAMPLE" />
+          <VideoEmbed videoId="UcGm_PM2IwY" />
+          <InstagramEmbed postId="DFVv4XrNLTf" />
         </div>
 
         <div className="flex justify-center gap-8">

@@ -98,18 +98,18 @@ export const About = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Email Us</h3>
-              <p className="text-gray-600">support@SKales.com</p>
+              <p className="text-gray-600">impex@growphal.com</p>
             </div>
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Call Us</h3>
-              <p className="text-gray-600">1234567897</p>
+              <p className="text-gray-600">9920306112</p>
             </div>
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Visit Us</h3>
               <p className="text-gray-600">
-                123 Fruit Street
+                APMC Fruit Market, Plot No-3 & 7, Sector-19
                 <br />
-                Freshville, FR 12345
+                Turbhe,Navi Mumbai, 400705
               </p>
             </div>
           </div>

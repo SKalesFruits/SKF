@@ -3,7 +3,15 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { Product } from "../types";
-import { ShoppingCart, Leaf, Sun, Plus, Minus } from "lucide-react";
+import {
+  ShoppingCart,
+  Leaf,
+  Sun,
+  Plus,
+  Minus,
+  Star,
+  Flame,
+} from "lucide-react";
 import { calculateDiscountedPrice } from "../utils/price";
 
 interface ProductCardProps {
@@ -15,8 +23,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
   const discountedPrice = calculateDiscountedPrice(product.price);
   const gradientClass = `${product.category}-gradient`;
+  const discountPercentage = Math.round(
+    ((product.price - discountedPrice) / product.price) * 100
+  );
 
-  // Find if product is in cart and set initial quantity
+  // Check if product is in cart and set initial quantity
   useEffect(() => {
     const cartItem = state.items.find((item) => item.id === product.id);
     if (cartItem) {
@@ -36,33 +47,60 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      whileHover={{ scale: 1.03 }}
-      className="bg-white rounded-2xl shadow-lg overflow-hidden"
+      whileHover={{ scale: 1.05 }}
+      className="bg-white rounded-2xl shadow-lg overflow-hidden relative group transition-all"
     >
+      {/* Discount Tag */}
+      {discountPercentage > 0 && (
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="absolute top-2 left-2 bg-red-500 text-white px-3 py-1 text-xs font-bold rounded-full"
+        >
+          🔥 {discountPercentage}% OFF
+        </motion.div>
+      )}
+
       <Link to={`/product/${product.id}`}>
-        <div className={`relative h-48 ${gradientClass}`}>
+        <div className={`relative h-48 ${gradientClass} overflow-hidden`}>
           <motion.img
             whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.3 }}
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover mix-blend-overlay"
+            className="w-full h-full object-cover"
           />
         </div>
       </Link>
+
       <div className="p-6">
         <div className="flex justify-between items-start mb-3">
-          <h3 className="text-xl font-bold text-gray-800">{product.name}</h3>
+          {/* Product Name */}
+          <h3 className="text-lg font-bold text-gray-800 group-hover:text-fruit-red transition-all">
+            {product.name}{" "}
+            {product.popularity > 4 && (
+              <span className="text-yellow-500 text-xs flex items-center">
+                <Flame className="w-4 h-4 mr-1" /> Best Seller
+              </span>
+            )}
+          </h3>
+
+          {/* Price Display */}
           <div className="text-right">
             <span className="text-gray-500 line-through text-sm">
-              ${product.price}
+              ₹{product.price}
             </span>
             <span className="text-fruit-red text-xl font-bold block">
-              ${discountedPrice}
+              ₹{discountedPrice}
             </span>
           </div>
         </div>
-        <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+
+        {/* Product Description */}
+        <p className="text-gray-600 text-sm h-8 mb-4">{product.description}</p>
+
+        {/* Tags (Organic, Seasonal) */}
         <div className="flex flex-wrap gap-2 mb-4">
           {product.organic && (
             <motion.span
@@ -83,28 +121,44 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </motion.span>
           )}
         </div>
+
+        <div className="h-5 mb-3">
+          {product.stock !== undefined && product.stock < 5 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-red-500 text-xs font-semibold"
+            >
+              ⚠️ Only {product.stock} left in stock!
+            </motion.div>
+          )}
+        </div>
+
+        {/* Quantity Selector */}
         <div className="flex items-center gap-4 mb-4">
           <div className="flex items-center border rounded-lg">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="p-2 hover:bg-gray-100"
+              className="p-2 hover:bg-gray-100 transition-all"
             >
               <Minus className="h-4 w-4" />
             </button>
             <span className="px-4 py-2 border-x">{quantity}</span>
             <button
               onClick={() => setQuantity(quantity + 1)}
-              className="p-2 hover:bg-gray-100"
+              className="p-2 hover:bg-gray-100 transition-all"
             >
               <Plus className="h-4 w-4" />
             </button>
           </div>
         </div>
+
+        {/* Add to Cart Button */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleAddToCart}
-          className="w-full bg-fruit-red text-white py-3 rounded-xl hover:bg-fruit-purple transition-colors duration-300 flex items-center justify-center gap-2 font-medium"
+          className="w-full bg-gradient-to-r from-fruit-red to-fruit-red text-white py-3 rounded-xl hover:from-fruit-purple hover:to-fruit-red transition-all duration-300 flex items-center justify-center gap-2 font-medium"
         >
           <ShoppingCart className="h-4 w-4" />
           Add to Cart

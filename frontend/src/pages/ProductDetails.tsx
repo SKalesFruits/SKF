@@ -4,36 +4,40 @@ import { motion } from "framer-motion";
 import { Star, ShoppingCart, Plus, Minus, Leaf, Sun } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { products } from "../data/products";
+import { reviews } from "../data/reviews";
 import { calculateDiscountedPrice } from "../utils/price";
 import { RelatedProducts } from "../components/RelatedProducts";
-import { Product } from "../types";
+import { Product, Reviews } from "../types";
 
-const mockReviews = [
-  {
-    id: 1,
-    user: "Sarah M.",
-    rating: 5,
-    comment: "The freshest fruits I've ever ordered online!",
-    date: "2024-03-01",
-  },
-  {
-    id: 2,
-    user: "John D.",
-    rating: 4,
-    comment: "Great quality, but delivery was a bit delayed.",
-    date: "2024-02-28",
-  },
-];
+// const mockReviews = [
+//   {
+//     review_id: 1,
+//     user: "Sarah M.",
+//     rating: 5,
+//     comment: "The freshest fruits I've ever ordered online!",
+//     date: "2024-03-01",
+//   },
+//   {
+//     review_id: 2,
+//     user: "John D.",
+//     rating: 4,
+//     comment: "Great quality, but delivery was a bit delayed.",
+//     date: "2024-02-28",
+//   },
+// ];
 
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { dispatch } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [items, setItems] = useState<Product[]>([]);
+  const [reviewsList, setReviewsList] = useState<Reviews[]>([]);
   useEffect(() => {
     const getProducts = async () => {
       const res = await products();
       setItems(res);
+      const restwo = await reviews();
+      setReviewsList(restwo);
     };
     getProducts();
   }, []);
@@ -53,9 +57,6 @@ export const ProductDetails = () => {
       payload: { ...product, price: discountedPrice, quantity },
     });
   };
-  const relatedProducts = items
-    .filter((p) => p.id !== product.id && p.category === product.category)
-    .slice(0, 6);
 
   return (
     <div className="min-h-screen pb-10">
@@ -65,12 +66,12 @@ export const ProductDetails = () => {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className={`${product.category}-gradient rounded-xl overflow-hidden`}
+              className={`rounded-xl overflow-hidden`}
             >
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-[400px] object-cover mix-blend-overlay"
+                className="w-full h-[400px] object-cover"
               />
             </motion.div>
 
@@ -82,10 +83,10 @@ export const ProductDetails = () => {
               <h1 className="text-3xl font-bold">{product.name}</h1>
               <div className="flex items-center gap-4">
                 <span className="text-gray-500 line-through text-xl">
-                  ${product.price}
+                  ₹{product.price}
                 </span>
                 <span className="text-fruit-red text-3xl font-bold">
-                  ${discountedPrice}
+                  ₹{discountedPrice}
                 </span>
                 <span className="bg-fruit-red/10 text-fruit-red px-2 py-1 rounded-full text-sm">
                   10% OFF
@@ -143,39 +144,43 @@ export const ProductDetails = () => {
             <div className="p-8">
               <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
               <div className="space-y-6">
-                {mockReviews.map((review) => (
-                  <div key={review.id} className="border-b pb-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <div className="bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center">
-                          {review.user[0]}
+                {reviewsList.map((review) =>
+                  review.product_id === product.id ? (
+                    <div key={review.review_id} className="border-b pb-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center">
+                            {review.user[0]}
+                          </div>
+                          <span className="font-medium">{review.user}</span>
                         </div>
-                        <span className="font-medium">{review.user}</span>
+                        <span className="text-sm text-gray-500">
+                          {new Date(review.date).toLocaleDateString()}
+                        </span>
                       </div>
-                      <span className="text-sm text-gray-500">
-                        {new Date(review.date).toLocaleDateString()}
-                      </span>
+                      <div className="flex items-center mb-2">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${
+                              i < review.rating
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-gray-800">{review.comment}</p>
                     </div>
-                    <div className="flex items-center mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-4 w-4 ${
-                            i < review.rating
-                              ? "text-yellow-400 fill-current"
-                              : "text-gray-300"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <p className="text-gray-800">{review.comment}</p>
-                  </div>
-                ))}
+                  ) : (
+                    <></>
+                  )
+                )}
               </div>
             </div>
           </div>
           <div className="why-empty">
-            {relatedProducts && relatedProducts.length > 0 ? (
+            {items && items.length > 0 ? (
               <RelatedProducts
                 category={product.category}
                 currentProductId={Number(id)}

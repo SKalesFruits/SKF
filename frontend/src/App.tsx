@@ -1,5 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
@@ -22,41 +27,69 @@ import { PrivacyPolicy } from "./components/PrivacyPolicy";
 import { RefundPolicy } from "./components/RefundPolicy";
 import { TermsOfService } from "./components/TermsOfService";
 import { Profile } from "./pages/Profile";
+import ScrollToTop from "./components/ScrollToTop";
+import LoadingScreen from "./components/OpeningScreen";
+
+const AppLayout = () => {
+  const location = useLocation();
+  const [loading, setLoading] = useState(true);
+  // Define pages where the footer should be hidden
+  const hideFooterPaths = [
+    "/login",
+    "/signup",
+    "/admin",
+    "/admin/inventory",
+    "/admin/orders",
+    "/admin/delivery",
+    "/cart",
+  ];
+
+  // Check if the current path is in the list
+  const hideFooter = hideFooterPaths.some((path) =>
+    location.pathname.startsWith(path)
+  );
+
+  return (
+    <CartProvider>
+      {/* {loading ? (
+        <LoadingScreen onComplete={() => setLoading(false)} />
+      ) : ( */}
+      <div className="min-h-screen bg-gray-50/80 flex flex-col">
+        <FruitBackground />
+        <Navbar />
+        <ScrollToTop />
+        <main className="flex-grow mt-[104px]">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/admin" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/orders" element={<OrderProfile />} />
+            <Route path="/admin/inventory" element={<Inventory />} />
+            <Route path="/admin/orders" element={<Orders />} />
+            <Route path="/admin/delivery" element={<DeliveryTeam />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+          </Routes>
+        </main>
+        {!hideFooter && <Footer />}
+        <Chatbot />
+      </div>
+    </CartProvider>
+  );
+};
 
 export const App = () => {
   return (
     <Router>
-      <CartProvider>
-        <div className="min-h-screen bg-gray-50/80 flex flex-col">
-          <FruitBackground />
-          <Navbar />
-          <main className="flex-grow mt-[104px]">
-            {" "}
-            {/* Adjusted margin to account for announcement bar */}
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/product/:id" element={<ProductDetails />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/admin" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/orders" element={<OrderProfile />} />
-              <Route path="/admin/inventory" element={<Inventory />} />
-              <Route path="/admin/orders" element={<Orders />} />
-              <Route path="/admin/delivery" element={<DeliveryTeam />} />
-              <Route path="/shipping-policy" element={<ShippingPolicy />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/refund-policy" element={<RefundPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
-            </Routes>
-          </main>
-          <Footer />
-          <Chatbot />
-        </div>
-      </CartProvider>
+      <AppLayout />
     </Router>
   );
 };

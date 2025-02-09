@@ -26,7 +26,7 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   console.log("HERE", currentProductId, category);
   const relatedProducts = items
-    .filter((p) => p.id !== currentProductId && p.category === category)
+    .filter((p) => p.id !== currentProductId)
     .slice(0, 6);
 
   const scroll = (direction: "left" | "right") => {
@@ -78,7 +78,7 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover mix-blend-overlay transition-transform group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform group-hover:scale-110"
                   />
                   {product.organic && (
                     <span className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs">
@@ -90,10 +90,10 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
                   <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-500 line-through text-sm">
-                      ${product.price}
+                      ₹{product.price}
                     </span>
                     <span className="text-fruit-red font-bold">
-                      ${calculateDiscountedPrice(product.price)}
+                      ₹{calculateDiscountedPrice(product.price)}
                     </span>
                     <span className="bg-fruit-red/10 text-fruit-red text-xs px-2 py-1 rounded-full">
                       10% OFF

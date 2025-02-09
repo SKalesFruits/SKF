@@ -3,9 +3,9 @@ import { PolicyPage } from "./PolicyPage";
 
 export const ShippingPolicy = () => {
   const content = `
-    <p>At Fresh Fruits, we ensure timely delivery of your orders. Our shipping policy is as follows:</p>
+    <p>At Growफल, we ensure timely delivery of your orders. Our shipping policy is as follows:</p>
     <ul class="list-disc pl-5">
-      <li>Orders are processed within 1-2 business days.</li>
+      <li>Orders are processed within 4-5 business days.</li>
       <li>We provide same-day delivery for select locations.</li>
       <li>Shipping fees vary based on your location and order total.</li>
     </ul>

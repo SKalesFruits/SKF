@@ -72,7 +72,7 @@ export const Orders = () => {
                         </p>
                       </div>
                       <p className="font-medium">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ₹{(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
                   ))}
@@ -81,7 +81,7 @@ export const Orders = () => {
                 <div className="border-t mt-4 pt-4 flex justify-between items-center">
                   <span className="font-medium">Total</span>
                   <span className="font-bold text-lg">
-                    ${order.total.toFixed(2)}
+                    ₹{order.total.toFixed(2)}
                   </span>
                 </div>
               </div>

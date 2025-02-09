@@ -6,14 +6,16 @@ import { User, Settings, Package, LogOut } from "lucide-react";
 interface UserProfileDropdownProps {
   isOpen: boolean;
   onClose: () => void;
+  authenticatedFlag: boolean;
 }
 
 export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
   isOpen,
   onClose,
+  authenticatedFlag,
 }) => {
   const handleLogout = () => {
-    // logout();
+    sessionStorage.clear();
     onClose();
   };
 

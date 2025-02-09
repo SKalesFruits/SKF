@@ -9,7 +9,8 @@ interface CartState {
 type CartAction =
   | { type: "ADD_TO_CART"; payload: Product & { quantity: number } }
   | { type: "REMOVE_FROM_CART"; payload: number }
-  | { type: "UPDATE_QUANTITY"; payload: { id: number; quantity: number } };
+  | { type: "UPDATE_QUANTITY"; payload: { id: number; quantity: number } }
+  | { type: "CLEAR_CART" };
 
 const CartContext = createContext<{
   state: CartState;
@@ -54,6 +55,13 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ...state,
         items: state.items.filter((item) => item.id !== action.payload),
         total: state.total - (item ? item.price * item.quantity : 0),
+      };
+    }
+    case "CLEAR_CART": {
+      return {
+        ...state,
+        items: [], // Clear all cart items
+        total: 0, // Reset total price
       };
     }
     case "UPDATE_QUANTITY": {

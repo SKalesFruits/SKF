@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Search, Filter } from 'lucide-react';
-import { Order } from '../../types';
-
-const mockOrders: Order[] = [
-  {
-    id: '1234',
-    items: [],
-    total: 123.45,
-    status: 'pending',
-    customerName: 'John Doe',
-    customerEmail: 'john@example.com',
-    address: '123 Main St',
-    createdAt: '2024-03-10T10:00:00Z'
-  },
-  // Add more mock orders as needed
-];
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Search, Filter } from "lucide-react";
+import { orders } from "../../data/order";
+import { Order } from "../../types";
 
 export const Orders = () => {
-  const [filter, setFilter] = useState('all');
-  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const [orderlist, setOrders] = useState<Order[]>([]);
 
-  const filteredOrders = mockOrders.filter(order => {
-    if (filter !== 'all' && order.status !== filter) return false;
-    return order.customerName.toLowerCase().includes(search.toLowerCase()) ||
-           order.id.includes(search);
+  useEffect(() => {
+    const getProducts = async () => {
+      const restwo = await orders();
+      setOrders(restwo);
+    };
+    getProducts();
+  }, []);
+  const filteredOrders = orderlist.filter((order) => {
+    if (filter !== "all" && order.currentStatus !== filter) return false;
+    return (
+      order.userName.toLowerCase().includes(search.toLowerCase()) ||
+      order.orderId.includes(search)
+    );
   });
 
   return (
@@ -86,36 +83,42 @@ export const Orders = () => {
             <tbody className="divide-y divide-gray-200">
               {filteredOrders.map((order) => (
                 <motion.tr
-                  key={order.id}
+                  key={order.orderId}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">#{order.id}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{order.customerName}</div>
-                    <div className="text-sm text-gray-500">{order.customerEmail}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      #{order.orderId}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
-                      {new Date(order.createdAt).toLocaleDateString()}
+                      {order.userName}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {new Date(order.dateOfOrderPlaced).toLocaleDateString()}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${order.total.toFixed(2)}
+                    ₹{order.totalOrderAmount.toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      {
-                        pending: 'bg-yellow-100 text-yellow-800',
-                        processing: 'bg-blue-100 text-blue-800',
-                        delivered: 'bg-green-100 text-green-800',
-                        cancelled: 'bg-red-100 text-red-800'
-                      }[order.status]
-                    }`}>
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        {
+                          pending: "bg-yellow-100 text-yellow-800",
+                          processing: "bg-blue-100 text-blue-800",
+                          delivered: "bg-green-100 text-green-800",
+                          cancelled: "bg-red-100 text-red-800",
+                        }[order.currentStatus]
+                      }`}
+                    >
+                      {order.currentStatus.charAt(0).toUpperCase() +
+                        order.currentStatus.slice(1)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

@@ -3,7 +3,7 @@ import { PolicyPage } from "./PolicyPage";
 
 export const TermsOfService = () => {
   const content = `
-    <p>Welcome to Fresh Fruits! By using our website, you agree to the following terms:</p>
+    <p>Welcome to S Kale's! By using our website, you agree to the following terms:</p>
     <ul class="list-disc pl-5">
       <li>All products are subject to availability.</li>
       <li>Prices are subject to change without prior notice.</li>

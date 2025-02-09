@@ -5,6 +5,9 @@ import { ShoppingCart, Apple, Menu, X, User } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { AnnouncementBar } from "./AnnouncementBar";
 import { UserProfileDropdown } from "./UserProfileDropdown";
+import LogoTwo from "./impexone.png";
+// import LogoTwo from "./finallogo.png";
+import "./nav.css";
 
 export const Navbar = () => {
   const { state } = useCart();
@@ -15,16 +18,14 @@ export const Navbar = () => {
 
   const links = [
     { path: "/", label: "Home" },
+    { path: "/impex", label: "Impex" },
     { path: "/shop", label: "Shop" },
     { path: "/about", label: "About" },
+    { path: "/contact", label: "Contact Us" },
   ];
 
   useEffect(() => {
-    console.log(
-      sessionStorage.getItem("logged_in_user"),
-      sessionStorage.getItem("logged_in_user") !== null
-    );
-    if (sessionStorage.getItem("logged_in_user") !== null) {
+    if (sessionStorage.getItem("logged_in_user") !== "") {
       setUserAuthenticated(true);
     }
   }, []);
@@ -32,18 +33,22 @@ export const Navbar = () => {
   return (
     <div className="fixed top-0 w-full z-50">
       <AnnouncementBar />
-      <nav className="bg-white/80 backdrop-blur-md shadow-lg">
+      <nav className="bg-[#f77f00] backdrop-blur-md shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <Link to="/" className="flex items-center space-x-2">
               <motion.div
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.5 }}
-              >
-                <Apple className="h-8 w-8 text-fruit-red" />
-              </motion.div>
+              ></motion.div>
               <span className="text-xl font-bold bg-gradient-to-r from-fruit-red to-fruit-purple bg-clip-text text-transparent">
-                FreshFruit
+                {/* <img src={Logo} id="logo-gr"></img> */}
+                {/* <img src={LogoOne} id="logo-gr"></img> */}
+                <img src={LogoTwo} id="logo-gr"></img>
+                {/* <p>
+                  <span>Grow</span>
+                  <span>फल</span>
+                </p> */}
               </span>
             </Link>
 
@@ -51,7 +56,7 @@ export const Navbar = () => {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-gray-600 hover:text-fruit-red transition-colors"
+                className="text-white-600 hover:text-fruit-red transition-colors"
               >
                 {isOpen ? (
                   <X className="h-6 w-6" />
@@ -62,11 +67,11 @@ export const Navbar = () => {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-6">
               {links.map((link) => (
                 <Link key={link.path} to={link.path} className="relative group">
                   <span
-                    className={`text-gray-600 hover:text-fruit-red transition-colors ${
+                    className={`text-white hover:text-fruit-red transition-colors ${
                       location.pathname === link.path ? "text-fruit-red" : ""
                     }`}
                   >
@@ -75,14 +80,14 @@ export const Navbar = () => {
                   {location.pathname === link.path && (
                     <motion.div
                       layoutId="underline"
-                      className="absolute left-0 right-0 h-0.5 bg-fruit-red bottom-0"
+                      className="absolute left-0 right-0 h-0.5 bg-[#FFF200] bottom-0"
                     />
                   )}
                 </Link>
               ))}
               <Link to="/cart" className="relative">
                 <motion.div whileHover={{ scale: 1.1 }}>
-                  <ShoppingCart className="h-6 w-6 text-gray-600 hover:text-fruit-red transition-colors" />
+                  <ShoppingCart className="h-6 w-6 text-white hover:text-fruit-red transition-colors" />
                   <AnimatePresence>
                     {state.items.length > 0 && (
                       <motion.span
@@ -109,10 +114,11 @@ export const Navbar = () => {
                       </span>
                     </div>
                   ) : (
-                    <User className="h-6 w-6" />
+                    <p>Sign In</p>
                   )}
                 </button>
                 <UserProfileDropdown
+                  authenticatedFlag={authenticated}
                   isOpen={isProfileOpen}
                   onClose={() => setIsProfileOpen(false)}
                 />
@@ -138,8 +144,8 @@ export const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className={`block px-3 py-2 rounded-md text-base font-medium ${
                       location.pathname === link.path
-                        ? "text-fruit-red bg-fruit-red/10"
-                        : "text-gray-600 hover:text-fruit-red hover:bg-fruit-red/10"
+                        ? "text-[#ffffff] bg-[#ffffff]"
+                        : "text-[#ffffff] hover:text-[#ffffff] hover:bg-[#ffffff]"
                     }`}
                   >
                     {link.label}

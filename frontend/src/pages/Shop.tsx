@@ -8,7 +8,7 @@ export const Shop = () => {
     category: "all",
     seasonal: false,
     organic: false,
-    priceRange: [0, 100],
+    priceRange: [0, 500],
   });
   const [items, setItems] = useState<Product[]>([]);
   useEffect(() => {
@@ -93,7 +93,7 @@ export const Shop = () => {
               <input
                 type="range"
                 min="0"
-                max="100"
+                max="500"
                 value={filters.priceRange[1]}
                 onChange={(e) =>
                   setFilters((prev) => ({
@@ -104,8 +104,8 @@ export const Shop = () => {
                 className="w-full"
               />
               <div className="flex justify-between text-sm text-gray-600">
-                <span>${filters.priceRange[0]}</span>
-                <span>${filters.priceRange[1]}</span>
+                <span>₹{filters.priceRange[0]}</span>
+                <span>₹{filters.priceRange[1]}</span>
               </div>
             </div>
           </div>

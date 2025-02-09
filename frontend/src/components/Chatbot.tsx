@@ -1,46 +1,89 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+// import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const commonQuestions = [
-  {
-    id: 1,
-    question: "How does delivery work?",
-    answer:
-      "We deliver within 24 hours in most areas. Delivery is free for orders above $50.",
-  },
-  {
-    id: 2,
-    question: "Are your fruits organic?",
-    answer:
-      "Yes, we offer both organic and conventional fruits. Look for the organic badge on our products.",
-  },
-  {
-    id: 3,
-    question: "What's your return policy?",
-    answer:
-      "If you're not satisfied with the quality, we offer full refunds within 24 hours of delivery.",
-  },
-  {
-    id: 4,
-    question: "Do you have a subscription service?",
-    answer:
-      "Yes! You can subscribe to weekly or monthly fruit boxes at a 15% discount.",
-  },
-];
+const fruits = ["Apple", "Mango", "Banana", "Grapes", "Orange"];
 
 export const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<
-    Array<{ text: string; isUser: boolean }>
-  >([{ text: "Hello! How can I help you today?", isUser: false }]);
+  const [messages, setMessages] = useState([
+    { text: "Are you a Business or a Customer?", isUser: false },
+  ]);
+  const [userType, setUserType] = useState<"Business" | "Customer" | null>(
+    null
+  );
+  const [showOptions, setShowOptions] = useState(false);
+  const [selectedFruits, setSelectedFruits] = useState<string[]>([]);
+  const [showFruitSelection, setShowFruitSelection] = useState(false);
+  const [showConfirmButton, setShowConfirmButton] = useState(false);
+  const [businessDetails, setBusinessDetails] = useState<{
+    [key: string]: string;
+  }>({
+    name: "",
+    email: "",
+    phone: "",
+    country: "",
+  });
 
-  const handleQuestionClick = (question: string, answer: string) => {
+  const router = useNavigate();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSelection = (type: "Business" | "Customer") => {
+    setUserType(type);
+    setMessages((prev) => [...prev, { text: type, isUser: true }]);
+
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: "Do you wish to check out our Import-Export services or get a Quick Quote?",
+          isUser: false,
+        },
+      ]);
+      setShowOptions(true);
+    }, 500);
+  };
+
+  const handleOptionSelect = (option: "More Details" | "Get Quick Quote") => {
+    setShowOptions(false);
+    if (option === "More Details") {
+      router("/impex");
+    } else {
+      setMessages((prev) => [
+        ...prev,
+        { text: option, isUser: true },
+        { text: "Which fruit are you interested in?", isUser: false },
+      ]);
+      setShowFruitSelection(true);
+    }
+  };
+
+  const handleFruitSelect = (fruit: string) => {
+    setSelectedFruits((prev) =>
+      prev.includes(fruit) ? prev.filter((f) => f !== fruit) : [...prev, fruit]
+    );
+  };
+
+  const handleConfirmFruits = () => {
+    setShowFruitSelection(false);
     setMessages((prev) => [
       ...prev,
-      { text: question, isUser: true },
-      { text: answer, isUser: false },
+      { text: `Selected fruits: ${selectedFruits.join(", ")}`, isUser: true },
+      {
+        text: "Provide your business details for getting the quotation",
+        isUser: false,
+      },
     ]);
+  };
+
+  const handleBusinessInput = (field: string, value: string) => {
+    setBusinessDetails((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -49,7 +92,7 @@ export const Chatbot = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-fruit-red text-white p-4 rounded-full shadow-lg z-50"
+        className="fixed bottom-6 right-6 bg-[#f77f00] text-white p-4 rounded-full shadow-lg z-50"
       >
         <MessageCircle className="h-6 w-6" />
       </motion.button>
@@ -62,8 +105,8 @@ export const Chatbot = () => {
             exit={{ opacity: 0, y: 100 }}
             className="fixed bottom-24 right-6 w-96 bg-white rounded-2xl shadow-xl z-50"
           >
-            <div className="p-4 bg-fruit-red text-white rounded-t-2xl flex justify-between items-center">
-              <h3 className="font-semibold">SKales Assistant</h3>
+            <div className="p-4 bg-[#F77F00] text-white rounded-t-2xl flex justify-between items-center">
+              <h3 className="font-semibold">Growफल Assistant</h3>
               <button onClick={() => setIsOpen(false)}>
                 <X className="h-5 w-5" />
               </button>
@@ -71,10 +114,8 @@ export const Chatbot = () => {
 
             <div className="h-64 overflow-y-auto p-4 space-y-4">
               {messages.map((message, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
                   className={`flex ${
                     message.isUser ? "justify-end" : "justify-start"
                   }`}
@@ -82,32 +123,106 @@ export const Chatbot = () => {
                   <div
                     className={`max-w-[80%] p-3 rounded-lg ${
                       message.isUser
-                        ? "bg-fruit-red text-white rounded-br-none"
+                        ? "bg-[#fcbf49] text-white rounded-br-none"
                         : "bg-gray-100 text-gray-800 rounded-bl-none"
                     }`}
                   >
                     {message.text}
                   </div>
-                </motion.div>
+                </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
 
-            <div className="p-4 border-t">
-              <h4 className="text-sm font-medium text-gray-700 mb-2">
-                Common Questions
-              </h4>
-              <div className="space-y-2">
-                {commonQuestions.map((q) => (
+            {!userType && (
+              <div className="p-4 border-t flex space-x-2">
+                <button
+                  onClick={() => handleSelection("Business")}
+                  className="w-1/2 p-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                >
+                  Business
+                </button>
+                <button
+                  onClick={() => handleSelection("Customer")}
+                  className="w-1/2 p-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                >
+                  Customer
+                </button>
+              </div>
+            )}
+
+            {showOptions && (
+              <div className="p-4 border-t space-y-2">
+                <button
+                  onClick={() => handleOptionSelect("More Details")}
+                  className="w-full p-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                >
+                  More Details
+                </button>
+                <button
+                  onClick={() => handleOptionSelect("Get Quick Quote")}
+                  className="w-full p-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                >
+                  Get Quick Quote
+                </button>
+              </div>
+            )}
+
+            {showFruitSelection && (
+              <div className="p-4 border-t space-y-2">
+                {fruits.map((fruit) => (
                   <button
-                    key={q.id}
-                    onClick={() => handleQuestionClick(q.question, q.answer)}
-                    className="w-full text-left text-sm p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    key={fruit}
+                    className={`px-5 py-2 m-1 rounded-lg ${
+                      selectedFruits.includes(fruit)
+                        ? "bg-[#F77F00] text-white"
+                        : "bg-[#E9E1B6] hover:bg-[#E9E1B6]"
+                    }`}
+                    onClick={() => handleFruitSelect(fruit)}
                   >
-                    {q.question}
+                    {fruit}
                   </button>
                 ))}
+                <div className="">
+                  <input
+                    type={"number"}
+                    placeholder="Quantity"
+                    className="px-5 py-2 m-1 rounded-lg"
+                  ></input>
+                  <p className="px-5 py-2 m-1 rounded-lg">Metric Tons</p>
+                </div>
+                {selectedFruits.length > 0 && (
+                  <button
+                    onClick={handleConfirmFruits}
+                    className="w-full p-2 bg-[#fcbf49] text-white rounded-lg mt-2"
+                  >
+                    Confirm
+                  </button>
+                )}
               </div>
-            </div>
+            )}
+
+            {selectedFruits.length > 0 && (
+              <div className="p-4 border-t space-y-2">
+                {Object.keys(businessDetails).map((key) => (
+                  <input
+                    key={key}
+                    type="text"
+                    placeholder={key
+                      .replace("name", "Business Name")
+                      .replace("email", "Email ID")
+                      .replace("phone", "Phone Number")
+                      .replace("country", "Country to be imported")}
+                    className="w-full p-2 border rounded-lg"
+                    value={businessDetails[key]}
+                    onChange={(e) => handleBusinessInput(key, e.target.value)}
+                  />
+                ))}
+                <button className="w-full bg-[#f77f00] text-white py-2 rounded mt-2">
+                  Send Enquiry
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

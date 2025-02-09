@@ -1,43 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { Apple, User, Mail, Lock, ArrowRight } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  User,
+  Mail,
+  Lock,
+  LocateIcon,
+  MapPinCheckIcon,
+  SearchX,
+  Contact2Icon,
+  ArrowRight,
+} from "lucide-react";
 import axios from "axios";
+import { deliverycities } from "../data/cities";
+import { Cities } from "../types";
+import signupIllustration from "./signup.svg";
 
 export const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [contact, setContact] = useState("");
   const [password, setPassword] = useState("");
+  const [citiesList, setCityList] = useState<Cities[]>([]);
+  const [orderLocation, setOrderLocation] = useState(
+    sessionStorage.getItem("orderLocation") || ""
+  );
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getCities = async () => {
+      const res = await deliverycities();
+      setCityList(res);
+    };
+    getCities();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const userData = {
-      user_name: name,
-      user_email: email,
-      user_contact: 7894561231,
-      user_password: password,
-      user_address: "asdsad adss das asdsad",
-      user_type: "user",
-    };
-
     try {
       const response = await axios.post(
         "http://localhost:8000/api/auth/signup",
         {
           user_name: name,
           user_email: email,
-          user_contact: 7894561231,
+          user_city: orderLocation,
+          user_contact: contact,
           user_password: password,
-          user_address: "asdsad adss das asdsad",
+          user_address: address,
+          user_pincode: pincode,
           user_type: "user",
         }
       );
-
       if (response.status) {
         sessionStorage.setItem("logged_in_user", name);
         sessionStorage.setItem("logged_in_email", email);
         sessionStorage.setItem("logged_in_usertype", "user");
+        sessionStorage.setItem("logged_in_user_address", address);
+        sessionStorage.setItem("logged_in_user_pincode", pincode);
+        sessionStorage.setItem("logged_in_user_city", orderLocation);
         navigate("/");
       } else {
         console.error("Error:", response.data);
@@ -48,141 +70,136 @@ export const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-fruit-red/5 to-fruit-purple/5 px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
-      >
-        <div
-          className="bg-white rounded-2xl shadow-xl overflow-hidden"
-          style={{ marginTop: "4rem" }}
-        >
-          <div className="px-8 pt-8 pb-6">
-            <div className="text-center mb-8">
-              <motion.div
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.5 }}
-                className="inline-block"
-              >
-                <Apple className="h-12 w-12 text-fruit-red mx-auto" />
-              </motion.div>
-              <h2 className="mt-4 text-3xl font-bold bg-gradient-to-r from-fruit-red to-fruit-purple bg-clip-text text-transparent">
-                Create Account
-              </h2>
-              <p className="mt-2 text-gray-600">Join our S Kales community</p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fruit-red focus:border-transparent"
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fruit-red focus:border-transparent"
-                    placeholder="Enter your email"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fruit-red focus:border-transparent"
-                    placeholder="Create a password"
-                    required
-                  />
-                </div>
-                <p className="mt-2 text-sm text-gray-500">
-                  Must be at least 8 characters long
-                </p>
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                className="w-full bg-gradient-to-r from-fruit-red to-fruit-purple text-white py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-              >
-                Create Account
-                <ArrowRight className="h-4 w-4" />
-              </motion.button>
-            </form>
-          </div>
-
-          <div className="px-8 py-4 bg-gray-50 border-t border-gray-100">
-            <p className="text-sm text-center text-gray-600">
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                className="text-fruit-red hover:text-fruit-purple font-medium"
-              >
-                Sign in
-              </Link>
-            </p>
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white shadow-xl rounded-xl p-8 flex flex-col md:flex-row w-[90%] max-w-4xl gap-8">
+        {/* Illustration Section */}
+        <div className="hidden md:flex w-1/2 justify-center items-center">
+          <img src={signupIllustration} alt="Signup" className="max-w-xs" />
         </div>
 
-        {/* <div className="mt-8">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gradient-to-br from-fruit-red/5 to-fruit-purple/5 text-gray-500">
-                Or sign up with
-              </span>
-            </div>
-          </div>
+        {/* Form Section */}
+        <div className="w-full md:w-1/2">
+          <h2 className="text-3xl font-bold text-center text-gray-800">
+            Create Account
+          </h2>
+          <p className="text-center text-gray-600 mb-6">
+            Join our Growफल community
+          </p>
 
-          <div className="mt-6 grid grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Full Name */}
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="input w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                placeholder="Full Name"
+                required
+              />
+            </div>
+
+            {/* Email */}
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                placeholder="Email"
+                required
+              />
+            </div>
+
+            {/* City */}
+            <div className="relative">
+              <LocateIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <select
+                className="input w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                value={orderLocation}
+                onChange={(e) => setOrderLocation(e.target.value)}
+              >
+                <option value="">Select a city</option>
+                {citiesList.map((city) => (
+                  <option key={city.city} value={city.city}>
+                    {city.city}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Address */}
+            <div className="relative">
+              <MapPinCheckIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="input w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                placeholder="Address"
+                required
+              />
+            </div>
+
+            {/* Pincode */}
+            <div className="relative">
+              <SearchX className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value)}
+                className="input w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                placeholder="Pincode"
+                required
+              />
+            </div>
+
+            {/* Contact */}
+            <div className="relative">
+              <Contact2Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="tel"
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
+                className="input w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                placeholder="Contact Number"
+                required
+              />
+            </div>
+
+            {/* Password */}
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                placeholder="Password"
+                required
+              />
+            </div>
+
+            {/* Submit Button */}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-fruit-red"
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2"
             >
-              Google
+              Create Account <ArrowRight className="h-4 w-4" />
             </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-fruit-red"
-            >
-              Facebook
-            </motion.button>
-          </div>
-        </div> */}
-      </motion.div>
+          </form>
+          <p className="mt-4 text-center text-gray-600">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-600 hover:underline">
+              Sign in
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

@@ -127,7 +127,7 @@ export const Footer = () => {
         </div>
 
         <div className="border-t mt-8 pt-8 text-center text-gray-600">
-          <p>&copy; {new Date().getFullYear()} SKales. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} GrowPhal. All rights reserved.</p>
         </div>
       </div>
     </footer>

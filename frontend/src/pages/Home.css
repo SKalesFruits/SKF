@@ -1,0 +1,30 @@
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, #d4edda, #ffcece);
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #d4edda, #fa8888, #d4edda);
+  border-radius: 10px;
+  /* border: 2px solid #fff;  */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #d4edda, #fa8888);
+}
+
+/* Smooth scrolling effect */
+html {
+  scroll-behavior: smooth;
+  background-color: #eae2b7;
+}
+
+.newnkwenqkewq{
+  background-color: #f96868;
+}
