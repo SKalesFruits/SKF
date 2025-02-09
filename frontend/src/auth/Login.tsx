@@ -11,10 +11,13 @@ export const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle login logic here
-    const response = await axios.post("http://127.0.0.1:8000/api/auth/login", {
-      user_email: email,
-      user_password: password,
-    });
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_BASE_URLL}/api/auth/login`,
+      {
+        user_email: email,
+        user_password: password,
+      }
+    );
     if (response.data) {
       redirect("/");
     }

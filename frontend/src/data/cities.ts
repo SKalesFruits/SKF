@@ -3,7 +3,7 @@ import { Cities } from "../types";
 
 export const deliverycities = async (): Promise<Cities[]> => {
   const response: AxiosResponse<Cities[]> = await axios.get(
-    "http://127.0.0.1:8000/api/cities"
+    `${process.env.REACT_APP_API_BASE_URLL}/api/cities`
   );
   return response.data;
 };

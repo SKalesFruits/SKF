@@ -8,6 +8,10 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 app.config['SECRET_KEY'] = JWT_SECRET_KEY
 
+@app.route('/api/health',methods=['GET'])
+def health():
+    return jsonify({"message":"SERVER IS RUNNING"})
+
 # Auth Routes
 @app.route('/api/auth/signup', methods=['POST'])
 def signup():

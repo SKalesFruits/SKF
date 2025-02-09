@@ -67,10 +67,13 @@ export const Cart = () => {
 
   const handleCheckout = async () => {
     try {
-      const { data } = await axios.post("http://127.0.0.1:8000/create-order", {
-        amount: float2int(state.total.toFixed(2)) * 100,
-        currency: "INR",
-      });
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URLL}/create-order`,
+        {
+          amount: float2int(state.total.toFixed(2)) * 100,
+          currency: "INR",
+        }
+      );
 
       const options = {
         key: "rzp_test_4dogS15wIJLRlF",
@@ -81,18 +84,21 @@ export const Cart = () => {
         order_id: data.orderId,
         handler: async function (response: any) {
           try {
-            await axios.post("http://127.0.0.1:8000/verify-payment", {
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              userName: userName,
-              orderLocation: orderLocation,
-              orderAddress: orderAddress,
-              totalOrderAmount: state.total,
-              items: state.items.map(
-                (item) => `${item.name} ( x ${item.quantity})`
-              ),
-            });
+            await axios.post(
+              `${process.env.REACT_APP_API_BASE_URLL}/verify-payment`,
+              {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                userName: userName,
+                orderLocation: orderLocation,
+                orderAddress: orderAddress,
+                totalOrderAmount: state.total,
+                items: state.items.map(
+                  (item) => `${item.name} ( x ${item.quantity})`
+                ),
+              }
+            );
 
             setIsOrderPopupVisible(true);
             dispatch({ type: "CLEAR_CART" });

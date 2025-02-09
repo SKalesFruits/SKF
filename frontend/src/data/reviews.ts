@@ -3,7 +3,7 @@ import { Reviews } from "../types";
 
 export const reviews = async (): Promise<Reviews[]> => {
   const response: AxiosResponse<Reviews[]> = await axios.get(
-    "http://127.0.0.1:8000/api/reviews"
+    `${process.env.REACT_APP_API_BASE_URLL}/api/reviews`
   );
   return response.data;
 };

@@ -41,7 +41,7 @@ export const Signup = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/auth/signup",
+        `${process.env.REACT_APP_API_BASE_URLL}/api/auth/signup`,
         {
           user_name: name,
           user_email: email,

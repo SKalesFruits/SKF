@@ -40,7 +40,9 @@ export const Inventory: React.FC = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/products");
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URLL}/api/products`
+      );
       setProducts(response.data);
       setError(null);
     } catch (err) {
@@ -71,7 +73,7 @@ export const Inventory: React.FC = () => {
   const addProduct = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/products",
+        `${process.env.REACT_APP_API_BASE_URLL}/api/products`,
         newProduct
       );
       setProducts([...products, { ...newProduct, _id: response.data.id }]);
@@ -101,7 +103,7 @@ export const Inventory: React.FC = () => {
 
     try {
       await axios.put(
-        `http://127.0.0.1:8000/api/products/${selectedProduct._id}`,
+        `${process.env.REACT_APP_API_BASE_URLL}/api/products/${selectedProduct._id}`,
         selectedProduct
       );
 
@@ -120,7 +122,9 @@ export const Inventory: React.FC = () => {
 
   const deleteProduct = async (id: string) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/products/${id}`);
+      await axios.delete(
+        `${process.env.REACT_APP_API_BASE_URLL}/api/products/${id}`
+      );
       setProducts(products.filter((product) => product._id !== id));
     } catch (err) {
       setError("Failed to delete product");

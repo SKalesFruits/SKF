@@ -5,7 +5,7 @@ import { ShoppingCart, Apple, Menu, X, User } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { AnnouncementBar } from "./AnnouncementBar";
 import { UserProfileDropdown } from "./UserProfileDropdown";
-import LogoTwo from "./impexone.png";
+import LogoTwo from "./logotwo.png";
 // import LogoTwo from "./finallogo.png";
 import "./nav.css";
 
