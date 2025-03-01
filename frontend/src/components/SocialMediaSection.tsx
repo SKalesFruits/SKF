@@ -39,13 +39,13 @@ export const SocialMediaSection = () => {
         videoId_yt &&
         postId_Ig
       ) {
-        setyt_link(yt_link);
-        setfb_link(fb_link);
-        settw_link(tw_link);
-        setlkdn_link(lkdn_link);
-        setig_link(ig_link);
-        setvideoId_yt(videoId_yt);
-        setpostId_Ig(postId_Ig);
+        setyt_link(yt_link.config_value);
+        setfb_link(fb_link.config_value);
+        settw_link(tw_link.config_value);
+        setlkdn_link(lkdn_link.config_value);
+        setig_link(ig_link.config_value);
+        setvideoId_yt(videoId_yt.config_value);
+        setpostId_Ig(postId_Ig.config_value);
       }
     };
     getConfig();
