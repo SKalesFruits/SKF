@@ -3,6 +3,7 @@ import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson import ObjectId
 from config import mongo_db, JWT_SECRET_KEY
+from flask import jsonify
 
 # Auth Functions
 def create_user(data):
@@ -134,6 +135,11 @@ def get_config():
     for config in configs:
         config['_id'] = str(config['_id'])
     return configs
+
+def submit_enquiries(enquiry_data):
+    enquiries_collection = mongo_db["enquiries"]
+    enquiries_collection.insert_one(enquiry_data)
+    return jsonify({"message": "Enquiry submitted successfully"}), 201
 
 def get_orders():
     orders_collection = mongo_db["orders"]

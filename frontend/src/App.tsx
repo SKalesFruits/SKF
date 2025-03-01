@@ -29,6 +29,7 @@ import { TermsOfService } from "./components/TermsOfService";
 import { Profile } from "./pages/Profile";
 import ScrollToTop from "./components/ScrollToTop";
 import { Impex } from "./pages/Impex";
+import ContactForm from "./components/ContactForm";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -78,6 +79,7 @@ const AppLayout = () => {
             <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/impex" element={<Impex />} />
+            <Route path="/contact" element={<ContactForm />} />
           </Routes>
         </main>
         {!hideFooter && <Footer />}

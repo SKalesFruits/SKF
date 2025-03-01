@@ -25,7 +25,7 @@ export const AnnouncementBar = () => {
   }, []);
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % items.length);
+      setCurrentIndex((prev) => (prev + 1) % 4);
     }, 5000);
 
     return () => clearInterval(timer);

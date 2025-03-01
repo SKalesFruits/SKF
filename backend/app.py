@@ -68,6 +68,24 @@ def get_config_details():
     config = get_config()
     return jsonify(config), 200
 
+@app.route("/api/enquiries", methods=["POST"])
+def submit_enquiry():
+    try:
+        data = request.json
+        if not all(k in data for k in ["product", "name", "email", "mobile", "enquiry"]):
+            return jsonify({"error": "Missing fields"}), 400
+        enquiry_data = {
+            "product": data["product"],
+            "name": data["name"],
+            "email": data["email"],
+            "mobile": data["mobile"],
+            "enquiry": data["enquiry"],
+        }
+        result = submit_enquiries(enquiry_data)
+        return result
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/api/orders/<order_id>', methods=['GET'])
 def get_order(order_id):
     order = get_order_by_id(order_id)
