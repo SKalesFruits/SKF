@@ -1,14 +1,33 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Youtube, Send } from "lucide-react";
+import axios, { AxiosResponse } from "axios";
+import toast from "react-hot-toast";
 
 export const Footer = () => {
   const [email, setEmail] = useState("");
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle newsletter subscription
-    setEmail("");
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_BASE_URL}/api/newsletter`,
+      {
+        email: email,
+      }
+    );
+    if (response.status === 200) {
+      toast.success("Congrats! You are added to GrowPhal gang", {
+        duration: 5000, // Optional: controls how long the toast stays
+        position: "top-right",
+        style: {
+          background: "#4CAF50",
+          color: "#fff",
+        },
+        icon: "🔥",
+      });
+      setEmail("");
+    } else {
+    }
   };
 
   return (
@@ -127,7 +146,9 @@ export const Footer = () => {
         </div>
 
         <div className="border-t mt-8 pt-8 text-center text-gray-600">
-          <p>&copy; {new Date().getFullYear()} GrowPhal. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} GrowPhal. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

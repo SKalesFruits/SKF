@@ -122,6 +122,15 @@ def get_reviews():
         review['review_id'] = str(review['review_id'])
     return reviews
 
+def user_newsletter(data):
+    email = data['email']
+    newsletter_collection = mongo_db["newsletter"]
+    obj = {
+        "email_id": email
+    }
+    newsletter_collection.insert_one(obj)
+    return {"message":"Successfully added to Newsletter"}
+
 def get_cities():
     cities_collection = mongo_db["deliveryCities"]
     cities = list(cities_collection.find())

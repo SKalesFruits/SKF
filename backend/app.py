@@ -68,6 +68,15 @@ def get_config_details():
     config = get_config()
     return jsonify(config), 200
 
+@app.route('/api/newsletter', methods=['POST'])
+def add_to_newsletter():
+    try:
+        data = request.json
+        newss = user_newsletter(data)
+        return jsonify(newss), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/api/enquiries", methods=["POST"])
 def submit_enquiry():
     try:

@@ -5,13 +5,15 @@ import { products } from "../data/products";
 import { Product } from "../types";
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
+import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 const ContactForm: React.FC = () => {
   const [phone_num, setPhoneNum] = useState<any>(0);
   const [phone_disabled, setPhoneDisabled] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [items, setItems] = useState<Product[]>([]);
-  const navigate = useNavigate();
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     const getConfig = async () => {
@@ -87,7 +89,15 @@ const ContactForm: React.FC = () => {
 
         const result = await response.json();
         if (response.ok) {
-          alert("Enquiry submitted successfully!");
+          toast.success("Operation successful!", {
+            duration: 5000, // Optional: controls how long the toast stays
+            position: "top-right",
+            style: {
+              background: "#4CAF50",
+              color: "#fff",
+            },
+            icon: "✅",
+          });
           setFormData({
             product: "",
             name: "",
@@ -108,7 +118,7 @@ const ContactForm: React.FC = () => {
   return (
     <div className="contact-container">
       <div className="company-info">
-        <h2>GrowPhal</h2>
+        <p className="font-bold text-4xl">GrowPhal</p>
         <div className="info">
           <p>
             <strong>Contact Person:</strong> Mr. Gauresh Kale

@@ -30,6 +30,7 @@ import { Profile } from "./pages/Profile";
 import ScrollToTop from "./components/ScrollToTop";
 import { Impex } from "./pages/Impex";
 import ContactForm from "./components/ContactForm";
+import { Toaster } from "react-hot-toast";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -52,6 +53,7 @@ const AppLayout = () => {
 
   return (
     <CartProvider>
+      <Toaster position="bottom-center" reverseOrder={false} />
       {/* {loading ? (
         <LoadingScreen onComplete={() => setLoading(false)} />
       ) : ( */}
