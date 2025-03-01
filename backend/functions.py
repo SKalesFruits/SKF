@@ -128,6 +128,13 @@ def get_cities():
         city['_id'] = str(city['_id'])
     return cities
 
+def get_config():
+    config_collection = mongo_db["configParams"]
+    configs = list(config_collection.find())
+    for config in configs:
+        config['_id'] = str(config['_id'])
+    return configs
+
 def get_orders():
     orders_collection = mongo_db["orders"]
     orders = list(orders_collection.find())

@@ -57,6 +57,14 @@ export interface Cities {
   coordinates: Coordinates;
 }
 
+export interface Config {
+  _id: {
+    $oid: string;
+  };
+  config_name: string;
+  config_value: string | Array<string> | number;
+}
+
 export interface Reviews {
   review_id: number;
   product_id: number;

@@ -63,6 +63,11 @@ def get_all_cities():
     cities = get_cities()
     return jsonify(cities), 200
 
+@app.route('/api/config', methods=['GET'])
+def get_config_details():
+    config = get_config()
+    return jsonify(config), 200
+
 @app.route('/api/orders/<order_id>', methods=['GET'])
 def get_order(order_id):
     order = get_order_by_id(order_id)

@@ -56,7 +56,7 @@ export const Navbar = () => {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-white-600 hover:text-fruit-red transition-colors"
+                className="text-white-600 hover:text-white-600 transition-colors"
               >
                 {isOpen ? (
                   <X className="h-6 w-6" />
@@ -71,7 +71,7 @@ export const Navbar = () => {
               {links.map((link) => (
                 <Link key={link.path} to={link.path} className="relative group">
                   <span
-                    className={`text-white hover:text-fruit-red transition-colors ${
+                    className={`text-white hover:text-[#FFF200] transition-colors ${
                       location.pathname === link.path ? "text-fruit-red" : ""
                     }`}
                   >

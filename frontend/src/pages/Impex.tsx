@@ -13,7 +13,7 @@ const images = [
   "https://images.unsplash.com/photo-1423483641154-5411ec9c0ddf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 ];
 
-export const Home = () => {
+export const Impex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const [items, setItems] = useState<Product[]>([]);
@@ -64,36 +64,16 @@ export const Home = () => {
 
       <div className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
         <AnimatePresence>
-          {/* <motion.img
-            key={currentIndex}
-            src={images[currentIndex]}
-            alt="Hero Slide"
-            className="absolute w-full h-full object-cover"
-            initial={{ opacity: 0, rotateX: 10, scale: 1.05 }} // Small perspective tilt
-            animate={{ opacity: 1, rotateX: 0, scale: 1 }} // Comes to normal view
-            exit={{ opacity: 0, rotateX: -10, scale: 1.02 }} // Tilts out subtly
-            transition={{ duration: 0.85, ease: "easeOut" }} // Smooth out
-          /> */}
           <motion.img
             key={currentIndex}
             src={images[currentIndex]}
             alt="Hero Slide"
             className="absolute w-full h-full object-cover"
-            initial={{ opacity: 0, filter: "blur(10px)", scale: 1.08 }} // Starts blurred
-            animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }} // Becomes clear
-            exit={{ opacity: 0, filter: "blur(10px)", scale: 1.02 }} // Slight blur on exit
-            transition={{ duration: 0.9, ease: "easeInOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
           />
-          {/* <motion.img
-            key={currentIndex}
-            src={images[currentIndex]}
-            alt="Hero Slide"
-            className="absolute w-full h-full object-cover hero-slide"
-            initial={{ opacity: 0, x: 50, scale: 1.05 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -50, scale: 1.02 }}
-            transition={{ duration: 0.9, ease: "easeOut" }}
-          /> */}
         </AnimatePresence>
 
         {/* Text Overlay */}
@@ -162,6 +142,59 @@ export const Home = () => {
               }`}
             ></div>
           ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center p-10 font-sans w-full">
+        <div className="flex items-center max-w-18xl gap-10  p-11 rounded-lg">
+          <div className="w-full">
+            <img
+              src={images[0]}
+              alt="Business Meeting"
+              className="w-full h-auto rounded-lg"
+            />
+          </div>
+          <div className="max-w-2xl">
+            <h2 className="text-2xl text-gray-900 font-bold">
+              Welcome to GrowPhal
+            </h2>
+            <p className="text-lg text-gray-600 mt-2">
+              Established in 2024, GrowPhal is a trusted name in the fruit
+              export industry. Based in Navi Mumbai, Maharashtra, we specialize
+              in providing high-quality fruits to markets across Maharashtra.
+            </p>
+            <button className="bg-[#ffb84d] text-white px-5 py-2 mt-3 rounded-md hover:bg-[#ffa00a] transition-all">
+              View more
+            </button>
+            <div className="flex justify-between gap-10 mt-8">
+              {[
+                {
+                  icon: "📦",
+                  title: "Nature of Business",
+                  description: "Exporter, Supplier, Trader",
+                },
+                {
+                  icon: "🧾",
+                  title: "GST Details",
+                  description: "1234567789909",
+                },
+                {
+                  icon: "👥",
+                  title: "Number of Employees",
+                  description: "10-15 People",
+                },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="flex-1 p-4 bg-gray-100 rounded-lg text-center flex flex-col items-center min-h-40"
+                >
+                  <span className="text-2xl">{item.icon}</span>
+                  <h4 className="font-semibold mt-2">{item.title}</h4>
+                  <p className="text-gray-700">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -263,6 +296,43 @@ export const Home = () => {
         </div>
       </div>
 
+      <div className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center p-6">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🤝</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Who we are</h3>
+              <p className="text-gray-600">
+                Established in 2024, Growफल is a trusted name in the fruits
+                export industry. Based in Navi Mumbai, Maharashtra
+              </p>
+            </div>
+            <div className="text-center p-6">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🎯</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Our Mission</h3>
+              <p className="text-gray-600">
+                To be a global leader in the fruits export sector by providing
+                freshest products and fostering long-lasting relationships with
+                our clients.
+              </p>
+            </div>
+            <div className="text-center p-6">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">✅</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Superior Quality</h3>
+              <p className="text-gray-600">
+                Our products undergo stringent quality checks to ensure they
+                meet global standards.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Fruit Finder Section */}
       <div className="py-20 bg-gradient-to-b from-green-100 to-green-50">
         <div className="max-w-4xl mx-auto px-6 text-center">

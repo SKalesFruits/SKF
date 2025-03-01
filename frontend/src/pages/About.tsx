@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SocialMediaSection } from "../components/SocialMediaSection";
+import { getConfigDetailsFromDB } from "../data/config";
 
 export const About = () => {
+  const [phone_num, setPhoneNum] = useState<any>(0);
+  const [email_id, setEmailId] = useState<any>("");
+  useEffect(() => {
+    const getConfig = async () => {
+      const res = await getConfigDetailsFromDB();
+      const phone_num = res.find((item) => item.config_name === "phone_num");
+      const email_id = res.find((item) => item.config_name === "email_id");
+      if (email_id && phone_num) {
+        setEmailId(email_id.config_value);
+        setPhoneNum(phone_num.config_value);
+      }
+    };
+    getConfig();
+  }, []);
   return (
     <div className="min-h-screen pt-16">
       {/* Hero Section */}
@@ -27,7 +42,7 @@ export const About = () => {
           <div>
             <h2 className="text-3xl font-semibold mb-6">Our Mission</h2>
             <p className="text-gray-600 leading-relaxed mb-6">
-              At FreshFruit, we believe everyone deserves access to fresh,
+              At GrowPhal, we believe everyone deserves access to fresh,
               high-quality fruits. Our mission is to connect local farmers with
               consumers, ensuring you get the freshest produce while supporting
               sustainable farming practices.
@@ -98,11 +113,11 @@ export const About = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Email Us</h3>
-              <p className="text-gray-600">impex@growphal.com</p>
+              <p className="text-gray-600">{email_id}</p>
             </div>
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Call Us</h3>
-              <p className="text-gray-600">9920306112</p>
+              <p className="text-gray-600">{phone_num}</p>
             </div>
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Visit Us</h3>

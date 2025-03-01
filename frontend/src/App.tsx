@@ -28,7 +28,7 @@ import { RefundPolicy } from "./components/RefundPolicy";
 import { TermsOfService } from "./components/TermsOfService";
 import { Profile } from "./pages/Profile";
 import ScrollToTop from "./components/ScrollToTop";
-import LoadingScreen from "./components/OpeningScreen";
+import { Impex } from "./pages/Impex";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -58,7 +58,7 @@ const AppLayout = () => {
         <FruitBackground />
         <Navbar />
         <ScrollToTop />
-        <main className="flex-grow mt-[104px]">
+        <main className="flex-grow mt-[80px]">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
@@ -77,6 +77,7 @@ const AppLayout = () => {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/impex" element={<Impex />} />
           </Routes>
         </main>
         {!hideFooter && <Footer />}

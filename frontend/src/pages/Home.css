@@ -1,22 +1,30 @@
-/* Scrollbar Styling */
+/* Scrollbar for WebKit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 8px; /* Thin scrollbar */
 }
 
+/* Track (background of the scrollbar) */
 ::-webkit-scrollbar-track {
-  background: linear-gradient(to bottom, #d4edda, #ffcece);
-  background-color: transparent;
+  background: #f8f8f8; /* Light background to blend subtly */
   border-radius: 10px;
 }
 
+/* Handle (the draggable part) */
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #d4edda, #fa8888, #d4edda);
+  background: #ffb84d; /* Soft orange to match the fruit theme */
   border-radius: 10px;
-  /* border: 2px solid #fff;  */
+  transition: background 0.3s ease-in-out;
 }
 
+/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #d4edda, #fa8888);
+  background: #ff9800; /* Darker orange for interaction */
+}
+
+/* Firefox scrollbar (for better cross-browser support) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #ffb84d #f8f8f8;
 }
 
 /* Smooth scrolling effect */
@@ -25,6 +33,86 @@ html {
   background-color: #eae2b7;
 }
 
-.newnkwenqkewq{
+.newnkwenqkewq {
   background-color: #f96868;
+}
+
+.hero-container {
+  position: relative;
+  width: 100%;
+  height: 500px; /* Adjust as needed */
+  overflow: hidden;
+}
+
+.hero-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.hero-slide.active {
+  opacity: 1;
+}
+.hero-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s ease-in-out;
+}
+
+.hero-slide.active::after {
+  transform: scaleX(1);
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-buttons {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+}
+
+.hero-button {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.hero-button:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.hero-indicators {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-indicator {
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  background: #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.hero-indicator.active {
+  background: #fff;
 }

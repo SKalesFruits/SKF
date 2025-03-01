@@ -44,16 +44,16 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
   }
 
   return (
-    <div className="py-12">
+    <div className="py-12 px-8">
       <h2 className="text-2xl font-bold mb-6">
         Similar {category.charAt(0).toUpperCase() + category.slice(1)}
       </h2>
       <div className="relative group">
         <motion.button
-          whileHover={{ scale: 1.1 }}
+          // whileHover={{ scale: 1 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute left-0 top-1/4 -translate-y-1/4 z-10 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
         >
           <ChevronLeft className="h-6 w-6 text-gray-600" />
         </motion.button>
@@ -68,7 +68,7 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1 }}
               className="min-w-[280px] bg-white rounded-xl shadow-sm overflow-hidden"
             >
               <Link to={`/product/${product.id}`}>
@@ -78,7 +78,7 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform group-hover:scale-10"
                   />
                   {product.organic && (
                     <span className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs">
@@ -106,10 +106,10 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
         </div>
 
         <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+          // whileHover={{ scale: 1 }}
+          whileTap={{ scale: 1 }}
           onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute right-0 top-1/4 -translate-y-1/4 z-10 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
         >
           <ChevronRight className="h-6 w-6 text-gray-600" />
         </motion.button>
