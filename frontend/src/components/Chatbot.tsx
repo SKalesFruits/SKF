@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 // import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X } from "lucide-react";
+import { MessageCircle, X, RefreshCcwIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const fruits = ["Apple", "Mango", "Banana", "Grapes", "Orange"];
 
@@ -17,18 +19,42 @@ export const Chatbot = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [selectedFruits, setSelectedFruits] = useState<string[]>([]);
   const [showFruitSelection, setShowFruitSelection] = useState(false);
-  const [showConfirmButton, setShowConfirmButton] = useState(false);
+  const [quantity, setQuantity] = useState(0);
+  const [customerOptions, setCustomerOptions] = useState(false);
   const [businessDetails, setBusinessDetails] = useState<{
     [key: string]: string;
   }>({
     name: "",
     email: "",
     phone: "",
-    country: "",
+    enquiry: "",
   });
 
   const router = useNavigate();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const faqs = [
+    {
+      question: "Do you offer home delivery for fruits?",
+      answer:
+        "Yes, we provide home delivery for all our fresh fruits. Delivery times may vary based on your location.",
+    },
+    {
+      question: "How do you ensure the freshness of the fruits?",
+      answer:
+        "We source our fruits directly from farms and handpick only the freshest produce to ensure top quality for our customers.",
+    },
+    {
+      question: "Can I return or exchange fruits if they are not fresh?",
+      answer:
+        "Yes, if you receive fruits that are not fresh, you can request a replacement or refund within 24 hours of delivery.",
+    },
+    {
+      question: "Do you offer organic fruits?",
+      answer:
+        "Yes, we have a selection of organic fruits that are grown without synthetic pesticides or fertilizers. You can find them in our organic section.",
+    },
+  ];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -38,16 +64,37 @@ export const Chatbot = () => {
     setUserType(type);
     setMessages((prev) => [...prev, { text: type, isUser: true }]);
 
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          text: "Do you wish to check out our Import-Export services or get a Quick Quote?",
-          isUser: false,
-        },
-      ]);
-      setShowOptions(true);
-    }, 500);
+    if (type === "Business") {
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            text: "Do you wish to check out our Import-Export services or get a Quick Quote?",
+            isUser: false,
+          },
+        ]);
+        setShowOptions(true);
+      }, 500);
+    } else {
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            text: "Check out our top FAQ's",
+            isUser: false,
+          },
+        ]);
+        setCustomerOptions(true);
+      }, 500);
+    }
+  };
+
+  const handleFAQs = (question: string, answer: string) => {
+    setMessages((prev) => [
+      ...prev,
+      { text: question, isUser: true },
+      { text: answer, isUser: false },
+    ]);
   };
 
   const handleOptionSelect = (option: "More Details" | "Get Quick Quote") => {
@@ -86,6 +133,72 @@ export const Chatbot = () => {
     setBusinessDetails((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleResetChat = () => {
+    setMessages([{ text: "Are you a Business or a Customer?", isUser: false }]);
+    setUserType(null);
+    setShowOptions(false);
+    setSelectedFruits([]);
+    setShowFruitSelection(false);
+    setCustomerOptions(false);
+    setBusinessDetails({
+      name: "",
+      email: "",
+      phone: "",
+      enquiry: "",
+    });
+
+    // Smoothly scroll to the initial message
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
+  const handleSendEnquiry = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/api/enquiries`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            product: selectedFruits.join(","),
+            name: businessDetails.name,
+            email: businessDetails.email,
+            mobile: businessDetails.phone,
+            enquiry: `My enquiry: ${businessDetails.enquiry}. Quantity Required :${quantity} Kgs`,
+          }),
+        }
+      );
+      if (response.status === 201) {
+        toast.success("Enquiry Sent!", {
+          duration: 5000, // Optional: controls how long the toast stays
+          position: "top-right",
+          style: {
+            background: "#4CAF50",
+            color: "#fff",
+          },
+          icon: "✅",
+        });
+        handleResetChat();
+        setIsOpen(false);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Enquiry Failed!", {
+        duration: 5000, // Optional: controls how long the toast stays
+        position: "top-right",
+        style: {
+          background: "#FF0000",
+          color: "#fff",
+        },
+      });
+      handleResetChat();
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
       <motion.button
@@ -107,9 +220,14 @@ export const Chatbot = () => {
           >
             <div className="p-4 bg-[#F77F00] text-white rounded-t-2xl flex justify-between items-center">
               <h3 className="font-semibold">Growफल Assistant</h3>
-              <button onClick={() => setIsOpen(false)}>
-                <X className="h-5 w-5" />
-              </button>
+              <div className="flex justify-around items-center w-20">
+                <button onClick={handleResetChat}>
+                  <RefreshCcwIcon className="h-5 w-5" />
+                </button>
+                <button onClick={() => setIsOpen(false)}>
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
 
             <div className="h-64 overflow-y-auto p-4 space-y-4">
@@ -167,7 +285,18 @@ export const Chatbot = () => {
                 </button>
               </div>
             )}
-
+            {customerOptions && (
+              <div className="p-4 border-t space-y-2">
+                {faqs.map((item) => (
+                  <button
+                    onClick={() => handleFAQs(item.question, item.answer)}
+                    className="w-full p-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                  >
+                    {item.question}
+                  </button>
+                ))}
+              </div>
+            )}
             {showFruitSelection && (
               <div className="p-4 border-t space-y-2">
                 {fruits.map((fruit) => (
@@ -188,8 +317,9 @@ export const Chatbot = () => {
                     type={"number"}
                     placeholder="Quantity"
                     className="px-5 py-2 m-1 rounded-lg"
+                    onChange={(e) => setQuantity(parseInt(e.target.value))}
                   ></input>
-                  <p className="px-5 py-2 m-1 rounded-lg">Metric Tons</p>
+                  <p className="px-5 py-2 m-1 rounded-lg">Kgs</p>
                 </div>
                 {selectedFruits.length > 0 && (
                   <button
@@ -209,16 +339,19 @@ export const Chatbot = () => {
                     key={key}
                     type="text"
                     placeholder={key
-                      .replace("name", "Business Name")
+                      .replace("name", "Name / Business Name")
                       .replace("email", "Email ID")
                       .replace("phone", "Phone Number")
-                      .replace("country", "Country to be imported")}
+                      .replace("enquiry", "Enquiry Details")}
                     className="w-full p-2 border rounded-lg"
                     value={businessDetails[key]}
                     onChange={(e) => handleBusinessInput(key, e.target.value)}
                   />
                 ))}
-                <button className="w-full bg-[#f77f00] text-white py-2 rounded mt-2">
+                <button
+                  onClick={handleSendEnquiry}
+                  className="w-full bg-[#f77f00] text-white py-2 rounded mt-2"
+                >
                   Send Enquiry
                 </button>
               </div>

@@ -1,27 +1,28 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Search, UserPlus } from 'lucide-react';
-import { DeliveryAgent } from '../../types';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Search, UserPlus } from "lucide-react";
+import { DeliveryAgent } from "../types";
 
 const mockAgents: DeliveryAgent[] = [
   {
-    id: '1',
-    name: 'Alex Johnson',
-    email: 'alex@example.com',
-    phone: '(555) 123-4567',
-    status: 'available',
+    id: "1",
+    name: "Alex Johnson",
+    email: "alex@example.com",
+    phone: "(555) 123-4567",
+    status: "available",
     activeOrders: [],
-    completedOrders: 150
+    completedOrders: 150,
   },
   // Add more mock agents as needed
 ];
 
 export const DeliveryTeam = () => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
-  const filteredAgents = mockAgents.filter(agent =>
-    agent.name.toLowerCase().includes(search.toLowerCase()) ||
-    agent.email.toLowerCase().includes(search.toLowerCase())
+  const filteredAgents = mockAgents.filter(
+    (agent) =>
+      agent.name.toLowerCase().includes(search.toLowerCase()) ||
+      agent.email.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -42,13 +43,16 @@ export const DeliveryTeam = () => {
         <div className="bg-white rounded-xl shadow-sm p-6">
           <h3 className="text-gray-600 text-sm mb-1">Available Agents</h3>
           <p className="text-2xl font-bold">
-            {mockAgents.filter(a => a.status === 'available').length}
+            {mockAgents.filter((a) => a.status === "available").length}
           </p>
         </div>
         <div className="bg-white rounded-xl shadow-sm p-6">
           <h3 className="text-gray-600 text-sm mb-1">Active Deliveries</h3>
           <p className="text-2xl font-bold">
-            {mockAgents.reduce((acc, curr) => acc + curr.activeOrders.length, 0)}
+            {mockAgents.reduce(
+              (acc, curr) => acc + curr.activeOrders.length,
+              0
+            )}
           </p>
         </div>
         <div className="bg-white rounded-xl shadow-sm p-6">
@@ -109,8 +113,12 @@ export const DeliveryTeam = () => {
                         {agent.name.charAt(0)}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{agent.name}</div>
-                        <div className="text-sm text-gray-500">ID: {agent.id}</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {agent.name}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          ID: {agent.id}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -119,12 +127,15 @@ export const DeliveryTeam = () => {
                     <div className="text-sm text-gray-500">{agent.phone}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      agent.status === 'available'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {agent.status.charAt(0).toUpperCase() + agent.status.slice(1)}
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        agent.status === "available"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-yellow-100 text-yellow-800"
+                      }`}
+                    >
+                      {agent.status.charAt(0).toUpperCase() +
+                        agent.status.slice(1)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

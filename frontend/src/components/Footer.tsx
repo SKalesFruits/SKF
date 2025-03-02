@@ -1,11 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Youtube, Send } from "lucide-react";
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  Send,
+  Linkedin,
+} from "lucide-react";
 import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
+import { getConfigDetailsFromDB } from "../data/config";
 
 export const Footer = () => {
   const [email, setEmail] = useState("");
+  const [yt_link, setyt_link] = useState<any>("");
+  const [fb_link, setfb_link] = useState<any>("");
+  const [tw_link, settw_link] = useState<any>("");
+  const [lkdn_link, setlkdn_link] = useState<any>("");
+  const [ig_link, setig_link] = useState<any>("");
+
+  useEffect(() => {
+    const getConfig = async () => {
+      const res = await getConfigDetailsFromDB();
+      const yt_link = res.find((item) => item.config_name === "yt_link");
+      const fb_link = res.find((item) => item.config_name === "fb_link");
+      const tw_link = res.find((item) => item.config_name === "tw_link");
+      const lkdn_link = res.find((item) => item.config_name === "lkdn_link");
+      const ig_link = res.find((item) => item.config_name === "ig_link");
+      if (yt_link && fb_link && tw_link && lkdn_link && ig_link) {
+        setyt_link(yt_link.config_value);
+        setfb_link(fb_link.config_value);
+        settw_link(tw_link.config_value);
+        setlkdn_link(lkdn_link.config_value);
+        setig_link(ig_link.config_value);
+      }
+    };
+    getConfig();
+  }, []);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,17 +136,23 @@ export const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Connect With Us</h3>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-600 hover:text-fruit-red">
+              <a href={fb_link} className="text-gray-600 hover:text-fruit-red">
                 <Facebook className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-600 hover:text-fruit-red">
+              <a href={tw_link} className="text-gray-600 hover:text-fruit-red">
                 <Twitter className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-600 hover:text-fruit-red">
+              <a href={ig_link} className="text-gray-600 hover:text-fruit-red">
                 <Instagram className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-600 hover:text-fruit-red">
+              <a href={yt_link} className="text-gray-600 hover:text-fruit-red">
                 <Youtube className="h-6 w-6" />
+              </a>
+              <a
+                href={lkdn_link}
+                className="text-gray-600 hover:text-fruit-red"
+              >
+                <Linkedin className="h-6 w-6" />
               </a>
             </div>
           </div>

@@ -12,6 +12,23 @@ export interface Product {
   popularity: number;
 }
 
+export interface UserDetails {
+  _id: {
+    $oid: string;
+  };
+  user_email: string;
+  user_name: string;
+  user_city: string;
+  user_contact: string;
+  user_address: string;
+  user_pincode: string;
+  user_password_hashed: string;
+  is_admin: boolean;
+  created_at: {
+    $date: string;
+  };
+}
+
 export interface CartItem extends Product {
   quantity: number;
 }

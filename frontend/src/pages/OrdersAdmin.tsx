@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Search, Filter } from "lucide-react";
-import { orders } from "../../data/order";
-import { Order } from "../../types";
+import { orders } from "../data/order";
+import { Order } from "../types";
 
-export const Orders = () => {
+export const OrdersAdmin = () => {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [orderlist, setOrders] = useState<Order[]>([]);

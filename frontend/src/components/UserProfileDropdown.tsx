@@ -17,6 +17,7 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
   const handleLogout = () => {
     sessionStorage.clear();
     onClose();
+    window.location.reload();
   };
 
   return (

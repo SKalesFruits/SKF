@@ -18,7 +18,7 @@ export const Login = () => {
         user_password: password,
       }
     );
-    if (response.data) {
+    if (response.status) {
       redirect("/");
     }
   };
@@ -38,7 +38,6 @@ export const Login = () => {
                 transition={{ duration: 0.5 }}
                 className="inline-block"
               >
-                <Apple className="h-12 w-12 text-fruit-red mx-auto" />
               </motion.div>
               <h2 className="mt-4 text-3xl font-bold bg-gradient-to-r from-fruit-red to-fruit-purple bg-clip-text text-transparent">
                 Welcome Back

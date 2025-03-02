@@ -147,13 +147,13 @@ def get_config():
 
 def admin_check(data):
     users_collection = mongo_db["users"]
-    user_name = {
-        "user_name": data["username"]
-    }
-    users = users_collection.find_one(user_name)
-    if users :
-        return users
-    return None
+    user = users_collection.find_one({"user_name": data["username"]})
+
+    if user:  # Ensure user is not None
+        user['_id'] = str(user['_id'])  # Convert ObjectId to string
+        return user
+    else:
+        return {"error": "User not found"}
     
 
 def submit_enquiries(enquiry_data):

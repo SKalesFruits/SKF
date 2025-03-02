@@ -8,9 +8,9 @@ import {
   IndianRupeeIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Order, Product } from "../../types";
-import { products } from "../../data/products";
-import { orders } from "../../data/order";
+import { Order, Product } from "../types";
+import { products } from "../data/products";
+import { orders } from "../data/order";
 
 export const Dashboard = () => {
   const [items, setItems] = useState<Product[]>([]);

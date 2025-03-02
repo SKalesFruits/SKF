@@ -6,11 +6,13 @@ import { Product, Reviews } from "../types";
 import "./Home.css";
 import { reviews } from "../data/reviews";
 import { motion, AnimatePresence } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { setMode } from "../features/general.slice";
 
 const images = [
-  "https://images.unsplash.com/photo-1472479427421-c6daa7ce0f7b?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1464454709131-ffd692591ee5?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1423483641154-5411ec9c0ddf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1622955658214-d05c1c6fcf84?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1463123081488-789f998ac9c4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1680779487022-bfcfd144ec83?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 ];
 
 export const Impex = () => {
@@ -19,7 +21,7 @@ export const Impex = () => {
   const [items, setItems] = useState<Product[]>([]);
   const [reviewsList, setReviews] = useState<Reviews[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -37,6 +39,7 @@ export const Impex = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
   useEffect(() => {
+    dispatch(setMode("impex"));
     const getProducts = async () => {
       const res = await products();
       const restwo = await reviews();
@@ -85,9 +88,9 @@ export const Impex = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.8 }}
           >
-            {currentIndex === 0 && "Freshness Delivered to Your Doorstep"}
-            {currentIndex === 1 && "Handpicked Organic Goodness"}
-            {currentIndex === 2 && "Taste the Sweetness of Nature"}
+            {currentIndex === 0 && "Bringing the Best from Farms to Markets"}
+            {currentIndex === 1 && "Handpicked Harvests, Near & Far"}
+            {currentIndex === 2 && "Maharashtra’s Finest, Delivered Beyond"}
           </motion.h1>
           <motion.p
             className="text-lg md:text-xl text-white mt-3 opacity-90"
@@ -97,11 +100,11 @@ export const Impex = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             {currentIndex === 0 &&
-              "Discover farm-fresh fruits packed with nutrition and taste."}
+              "Delivering fresh, high-quality fruits from our trusted farm."}
             {currentIndex === 1 &&
-              "We source only the best, organically grown fruits for you."}
+              "Sourcing and supplying premium fruits with care."}
             {currentIndex === 2 &&
-              "Experience the juiciest, most delicious seasonal picks."}
+              "Exporting farm-fresh fruits across Maharashtra."}
           </motion.p>
 
           {/* CTA Button */}
@@ -163,7 +166,10 @@ export const Impex = () => {
               export industry. Based in Navi Mumbai, Maharashtra, we specialize
               in providing high-quality fruits to markets across Maharashtra.
             </p>
-            <button className="bg-[#ffb84d] text-white px-5 py-2 mt-3 rounded-md hover:bg-[#ffa00a] transition-all">
+            <button
+              className="bg-[#ffb84d] text-white px-5 py-2 mt-3 rounded-md hover:bg-[#ffa00a] transition-all"
+              onClick={() => navigate("/about")}
+            >
               View more
             </button>
             <div className="flex justify-between gap-10 mt-8">
@@ -182,6 +188,11 @@ export const Impex = () => {
                   icon: "👥",
                   title: "Number of Employees",
                   description: "10-15 People",
+                },
+                {
+                  icon: "⚖️",
+                  title: "Legal status of firm",
+                  description: "Individual (Sole proprietorship)",
                 },
               ].map((item, index) => (
                 <div

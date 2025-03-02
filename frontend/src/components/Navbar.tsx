@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingCart, Apple, Menu, X, User } from "lucide-react";
 import { useCart } from "../context/CartContext";
@@ -8,13 +8,17 @@ import { UserProfileDropdown } from "./UserProfileDropdown";
 import LogoTwo from "./logotwo.png";
 // import LogoTwo from "./finallogo.png";
 import "./nav.css";
+import axios, { AxiosResponse } from "axios";
+import { UserDetails } from "../types";
 
 export const Navbar = () => {
   const { state } = useCart();
   const [authenticated, setUserAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const links = [
     { path: "/", label: "Home" },
@@ -22,11 +26,23 @@ export const Navbar = () => {
     { path: "/shop", label: "Shop" },
     { path: "/about", label: "About" },
     { path: "/contact", label: "Contact Us" },
+    isAdmin ? { path: "/admin", label: "Admin" } : { path: "/", label: "" },
   ];
 
   useEffect(() => {
-    if (sessionStorage.getItem("logged_in_user") !== "") {
+    const check_admin_status = async () => {
+      const response: AxiosResponse<UserDetails> = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/api/admincheck`,
+        {
+          username: sessionStorage.getItem("logged_in_user"),
+        }
+      );
+      setIsAdmin(response.data.is_admin);
+    };
+    console.log(sessionStorage.getItem("logged_in_user"));
+    if (sessionStorage.getItem("logged_in_user") !== null) {
       setUserAuthenticated(true);
+      check_admin_status();
     }
   }, []);
   console.log(authenticated);
@@ -41,7 +57,7 @@ export const Navbar = () => {
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.5 }}
               ></motion.div>
-              <span className="text-xl font-bold bg-gradient-to-r from-fruit-red to-fruit-purple bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r from-[#FFFFFF] to-[#000000] bg-clip-text text-transparent">
                 {/* <img src={Logo} id="logo-gr"></img> */}
                 {/* <img src={LogoOne} id="logo-gr"></img> */}
                 <img src={LogoTwo} id="logo-gr"></img>
@@ -71,8 +87,10 @@ export const Navbar = () => {
               {links.map((link) => (
                 <Link key={link.path} to={link.path} className="relative group">
                   <span
-                    className={`text-white hover:text-[#FFF200] transition-colors ${
-                      location.pathname === link.path ? "text-fruit-red" : ""
+                    className={`text-white hover:text-[#FFFFFF] transition-colors ${
+                      location.pathname === link.path
+                        ? "text-[#FFFFFF]"
+                        : "text-[#FFFFFF]"
                     }`}
                   >
                     {link.label}
@@ -105,16 +123,21 @@ export const Navbar = () => {
               <div className="relative">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="flex items-center gap-2 text-gray-600 hover:text-fruit-red transition-colors"
+                  className="flex items-center gap-2 text-[#FFFFFF] hover:text-[#FFFFFF] transition-colors"
                 >
                   {authenticated ? (
-                    <div className="w-8 h-8 rounded-full bg-fruit-red/10 flex items-center justify-center">
-                      <span className="text-fruit-red font-medium">
-                        {sessionStorage.getItem("logged_in_user")}
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center border-b border-t border-x">
+                      <span className="text-[#FFFFFF] font-medium">
+                        {sessionStorage.getItem("userName") === null
+                          ? sessionStorage.getItem("logged_in_user")?.charAt(0)
+                          : sessionStorage.getItem("userName")?.charAt(0)}
                       </span>
                     </div>
                   ) : (
-                    <p>Sign In</p>
+                    <div className="flex items-center gap-2">
+                      <User className="h-5 w-5" />
+                      <p onClick={() => navigate("/signup")}>Sign In</p>
+                    </div>
                   )}
                 </button>
                 <UserProfileDropdown
@@ -154,7 +177,7 @@ export const Navbar = () => {
                 <Link
                   to="/cart"
                   onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-fruit-red hover:bg-fruit-red/10"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#FFFFFF]/10"
                 >
                   Cart ({state.items.length})
                 </Link>
@@ -163,14 +186,14 @@ export const Navbar = () => {
                     <Link
                       to="/profile"
                       onClick={() => setIsOpen(false)}
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-fruit-red hover:bg-fruit-red/10"
+                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#FFFFFF]/10"
                     >
                       Profile
                     </Link>
                     <Link
                       to="/orders"
                       onClick={() => setIsOpen(false)}
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-fruit-red hover:bg-fruit-red/10"
+                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#FFFFFF]/10"
                     >
                       My Orders
                     </Link>
@@ -179,7 +202,8 @@ export const Navbar = () => {
                   <Link
                     to="/login"
                     onClick={() => setIsOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-fruit-red hover:bg-fruit-red/10"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#000000
+                    ]"
                   >
                     Sign In
                   </Link>

@@ -16,12 +16,12 @@ import { ProductDetails } from "./pages/ProductDetails";
 import { Cart } from "./pages/Cart";
 import { About } from "./pages/About";
 import { Login } from "./auth/Login";
-import { Signup } from "./auth/Signup";
-import { Dashboard } from "./pages/admin/Dashboard";
-import { Inventory } from "./pages/admin/Inventory";
-import { Orders } from "./pages/admin/Orders";
+import { AuthForm } from "./auth/Signup";
+import { Dashboard } from "./pages/Dashboard";
+import { Inventory } from "./pages/Inventory";
+import { OrdersAdmin } from "./pages/OrdersAdmin";
 import { Orders as OrderProfile } from "./pages/Orders";
-import { DeliveryTeam } from "./pages/admin/DeliveryTeam";
+import { DeliveryTeam } from "./pages/DeliveryTeam";
 import { ShippingPolicy } from "./components/ShippingPolicy";
 import { PrivacyPolicy } from "./components/PrivacyPolicy";
 import { RefundPolicy } from "./components/RefundPolicy";
@@ -69,12 +69,12 @@ const AppLayout = () => {
             <Route path="/cart" element={<Cart />} />
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/signup" element={<AuthForm />} />
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/orders" element={<OrderProfile />} />
             <Route path="/admin/inventory" element={<Inventory />} />
-            <Route path="/admin/orders" element={<Orders />} />
+            <Route path="/admin/orders" element={<OrdersAdmin />} />
             <Route path="/admin/delivery" element={<DeliveryTeam />} />
             <Route path="/shipping-policy" element={<ShippingPolicy />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />

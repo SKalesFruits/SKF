@@ -25,6 +25,9 @@ export const Orders = () => {
   useEffect(() => {
     const getProducts = async () => {
       let username = sessionStorage.getItem("userName");
+      if (username === null) {
+        username = sessionStorage.getItem("logged_in_user");
+      }
       const res = await products();
       setItems(res);
       const restwo = await fetchordersbyusername(username);

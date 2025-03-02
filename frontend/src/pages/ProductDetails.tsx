@@ -17,20 +17,24 @@ import { calculateDiscountedPrice } from "../utils/price";
 import { RelatedProducts } from "../components/RelatedProducts";
 import { Product, Reviews } from "../types";
 import { ExploreMoreProducts } from "../components/ExploreMoreProducts";
+import toast from "react-hot-toast";
 
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { dispatch } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [quantityEnq, setQuantityEnq] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [items, setItems] = useState<Product[]>([]);
   const [reviewsList, setReviewsList] = useState<Reviews[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [measurementUnit, setMeasurementUnit] = useState("Ton");
-  const [mobileNumber, setMobileNumber] = useState("");
+  const [measurementUnit, setMeasurementUnit] = useState("Kgs");
+  const [mobileNumber, setMobileNumberEnq] = useState("");
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  let productSelected = "";
   useEffect(() => {
     const getProducts = async () => {
       const res = await products();
@@ -44,10 +48,13 @@ export const ProductDetails = () => {
     (item) => item.product_id === Number(id)
   );
   const product = items.find((p) => p.id === Number(id));
+
   if (!product) {
     return (
       <div className="min-h-screen pt-20 text-center">Product not found</div>
     );
+  } else {
+    productSelected = product?.name;
   }
 
   const discountedPrice = calculateDiscountedPrice(product.price);
@@ -57,6 +64,50 @@ export const ProductDetails = () => {
       type: "ADD_TO_CART",
       payload: { ...product, price: discountedPrice, quantity },
     });
+  };
+
+  const sendEnquiry = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/api/enquiries`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            product: productSelected,
+            name: name,
+            email: email,
+            mobile: mobileNumber,
+            enquiry: `Enquiring for Product: ${product.name}. Quantity Required :${quantityEnq} ${measurementUnit}`,
+          }),
+        }
+      );
+      if (response.status === 201) {
+        toast.success("Enquiry Sent!", {
+          duration: 5000, // Optional: controls how long the toast stays
+          position: "top-right",
+          style: {
+            background: "#4CAF50",
+            color: "#fff",
+          },
+          icon: "✅",
+        });
+        setIsModalOpen(false);
+      }
+    } catch (err) {
+      console.error(err);
+      setIsModalOpen(false);
+      toast.error("Enquiry Failed!", {
+        duration: 5000, // Optional: controls how long the toast stays
+        position: "top-right",
+        style: {
+          background: "#FF0000",
+          color: "#fff",
+        },
+      });
+    }
   };
 
   return (
@@ -231,21 +282,34 @@ export const ProductDetails = () => {
                 </h2>
 
                 <input
-                  type="number"
-                  placeholder="Quantity"
-                  value={quantityEnq}
-                  onChange={(e) => setQuantityEnq(e.target.value)}
+                  type="text"
+                  placeholder="Your Name / Business Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full p-2 mb-3 border border-gray-300 rounded-md"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full p-2 mb-3 border border-gray-300 rounded-md"
                 />
 
                 <div className="flex items-center mb-3">
+                  <input
+                    type="number"
+                    placeholder="Quantity"
+                    value={quantityEnq}
+                    onChange={(e) => setQuantityEnq(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
                   <input
                     type="text"
                     value={measurementUnit}
                     readOnly
                     className="w-full p-2 border border-gray-300 rounded-md cursor-not-allowed"
                   />
-                  <button className="text-blue-500 text-sm ml-2">Edit</button>
                 </div>
 
                 <div className="flex items-center mb-3 border border-gray-300 rounded-md p-2">
@@ -255,7 +319,7 @@ export const ProductDetails = () => {
                     type="tel"
                     placeholder="Enter Mobile No."
                     value={mobileNumber}
-                    onChange={(e) => setMobileNumber(e.target.value)}
+                    onChange={(e) => setMobileNumberEnq(e.target.value)}
                     className="w-full outline-none"
                   />
                 </div>
@@ -267,7 +331,10 @@ export const ProductDetails = () => {
                   >
                     Cancel
                   </button>
-                  <button className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                    onClick={sendEnquiry}
+                  >
                     Send Enquiry
                   </button>
                 </div>
