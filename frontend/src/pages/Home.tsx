@@ -79,10 +79,13 @@ export const Home = () => {
           />
         </AnimatePresence>
 
+        {/* Dark Gradient Overlay for Better Readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/10"></div>
+
         {/* Text Overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 gap-4 max-w-[90%] lg:max-w-[60%] mx-auto">
           <motion.h1
-            className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg"
+            className="text-2xl sm:text-3xl md:text-5xl font-bold text-white drop-shadow-lg leading-tight"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -92,8 +95,9 @@ export const Home = () => {
             {currentIndex === 1 && "Handpicked Organic Goodness"}
             {currentIndex === 2 && "Taste the Sweetness of Nature"}
           </motion.h1>
+
           <motion.p
-            className="text-lg md:text-xl text-white mt-3 opacity-90"
+            className="text-sm sm:text-lg md:text-xl text-white mt-2 opacity-90 leading-relaxed max-w-[80%] md:max-w-[60%]"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -108,37 +112,38 @@ export const Home = () => {
           </motion.p>
 
           {/* CTA Button */}
-          <motion.a
-            href={currentIndex === 0 ? "/shop" : "/about"}
-            className="mt-6 px-8 py-3 text-lg font-semibold text-white bg-green-600 rounded-full shadow-lg transition-all hover:bg-green-700"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-          >
-            {currentIndex === 0 ? "Shop Now" : "Learn More"}
-          </motion.a>
+          <Link to={currentIndex === 0 ? "/shop" : "/about"}>
+            <motion.a
+              className="mt-4 px-6 py-2 sm:px-8 sm:py-3 text-sm sm:text-lg font-semibold text-white bg-green-600 rounded-full shadow-lg transition-all hover:bg-green-700 self-center w-full max-w-[250px] text-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+            >
+              {currentIndex === 0 ? "Shop Now" : "Learn More"}
+            </motion.a>
+          </Link>
         </div>
 
         {/* Navigation Buttons */}
         <button
           onClick={prevSlide}
-          className="absolute left-6 z-10 bg-black/30 text-white p-4 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
+          className="absolute left-3 md:left-6 z-10 bg-black/30 text-white p-2 sm:p-4 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
         >
           ❮
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-6 z-10 bg-black/30 text-white p-4 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
+          className="absolute right-3 md:right-6 z-10 bg-black/30 text-white p-2 sm:p-4 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
         >
           ❯
         </button>
 
         {/* Indicators */}
-        <div className="absolute bottom-6 flex gap-2">
+        <div className="absolute bottom-4 sm:bottom-6 flex gap-2">
           {images.map((_, index) => (
             <div
               key={index}
-              className={`w-3 h-3 rounded-full transition-all ${
+              className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all ${
                 index === currentIndex
                   ? "bg-white scale-125 shadow-lg"
                   : "bg-gray-400 opacity-70"

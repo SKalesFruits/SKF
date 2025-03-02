@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, matchPath, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingCart, Apple, Menu, X, User } from "lucide-react";
 import { useCart } from "../context/CartContext";
@@ -19,15 +19,15 @@ export const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-
+  const isActive = (path: string) => matchPath(path, location.pathname);
   const links = [
     { path: "/", label: "Home" },
     { path: "/impex", label: "Impex" },
     { path: "/shop", label: "Shop" },
     { path: "/about", label: "About" },
     { path: "/contact", label: "Contact Us" },
-    isAdmin ? { path: "/admin", label: "Admin" } : { path: "/", label: "" },
-  ];
+    isAdmin ? { path: "/admin", label: "Admin" } : null, // Return `null` instead of an empty object
+  ].filter(Boolean); // Remove `null` values
 
   useEffect(() => {
     const check_admin_status = async () => {
@@ -72,7 +72,7 @@ export const Navbar = () => {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-white-600 hover:text-white-600 transition-colors"
+                className="text-[#FFFFFF] hover:text-[#FFFFFF] transition-colors"
               >
                 {isOpen ? (
                   <X className="h-6 w-6" />
@@ -84,25 +84,32 @@ export const Navbar = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
-              {links.map((link) => (
-                <Link key={link.path} to={link.path} className="relative group">
-                  <span
-                    className={`text-white hover:text-[#FFFFFF] transition-colors ${
-                      location.pathname === link.path
-                        ? "text-[#FFFFFF]"
-                        : "text-[#FFFFFF]"
-                    }`}
-                  >
-                    {link.label}
-                  </span>
-                  {location.pathname === link.path && (
-                    <motion.div
-                      layoutId="underline"
-                      className="absolute left-0 right-0 h-0.5 bg-[#FFF200] bottom-0"
-                    />
-                  )}
-                </Link>
-              ))}
+              {links.map(
+                (link) =>
+                  link !== null && (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      className="relative group"
+                    >
+                      <span
+                        className={`text-white hover:text-[#FFFFFF] transition-colors ${
+                          location.pathname === link.path
+                            ? "text-[#FFFFFF]"
+                            : "text-[#FFFFFF]"
+                        }`}
+                      >
+                        {link.label}
+                      </span>
+                      {location.pathname === link.path && (
+                        <motion.div
+                          layoutId="underline"
+                          className="absolute left-0 right-0 h-0.5 bg-[#FFF200] bottom-0"
+                        />
+                      )}
+                    </Link>
+                  )
+              )}
               <Link to="/cart" className="relative">
                 <motion.div whileHover={{ scale: 1.1 }}>
                   <ShoppingCart className="h-6 w-6 text-white hover:text-white:600 transition-colors" />
@@ -160,24 +167,31 @@ export const Navbar = () => {
               className="md:hidden bg-white border-t"
             >
               <div className="px-4 py-2 space-y-1">
-                {links.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => setIsOpen(false)}
-                    className={`block px-3 py-2 rounded-md text-base font-medium ${
-                      location.pathname === link.path
-                        ? "text-[#FFFFFF] bg-[#000000]"
-                        : "text-gray-600 hover:text-[#ffffff] hover:bg-[#000000]"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {links.map(
+                  (link) =>
+                    link !== null && (
+                      <Link
+                        key={link.path}
+                        to={link.path}
+                        onClick={() => setIsOpen(false)}
+                        className={`block px-3 py-2 rounded-md text-base font-medium ${
+                          location.pathname === link.path
+                            ? "text-[#FFFFFF] bg-[#000000]"
+                            : "text-gray-600 hover:text-[#ffffff] hover:bg-[#000000]"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    )
+                )}
                 <Link
                   to="/cart"
                   onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#FFFFFF]/10"
+                  className={`block px-3 py-2 rounded-md text-base font-medium ${
+                    isActive("/cart")
+                      ? "text-[#FFFFFF] bg-[#000000]"
+                      : "text-gray-600 hover:text-[#000000] hover:bg-[#FFFFFF]"
+                  }`}
                 >
                   Cart ({state.items.length})
                 </Link>
@@ -186,14 +200,14 @@ export const Navbar = () => {
                     <Link
                       to="/profile"
                       onClick={() => setIsOpen(false)}
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#FFFFFF]/10"
+                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#000000]"
                     >
                       Profile
                     </Link>
                     <Link
                       to="/orders"
                       onClick={() => setIsOpen(false)}
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#FFFFFF]/10"
+                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#000000]"
                     >
                       My Orders
                     </Link>

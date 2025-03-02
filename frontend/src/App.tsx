@@ -68,7 +68,7 @@ const AppLayout = () => {
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<AuthForm />} />
             <Route path="/signup" element={<AuthForm />} />
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />

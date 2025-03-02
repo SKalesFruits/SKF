@@ -79,66 +79,71 @@ export const Impex = () => {
           />
         </AnimatePresence>
 
+        {/* Dark Gradient Overlay for Better Readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/10"></div>
+
         {/* Text Overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 gap-4 max-w-[90%] lg:max-w-[60%] mx-auto">
           <motion.h1
-            className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg"
+            className="text-2xl sm:text-3xl md:text-5xl font-bold text-white drop-shadow-lg leading-tight"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.8 }}
           >
-            {currentIndex === 0 && "Bringing the Best from Farms to Markets"}
-            {currentIndex === 1 && "Handpicked Harvests, Near & Far"}
-            {currentIndex === 2 && "Maharashtra’s Finest, Delivered Beyond"}
+            {currentIndex === 0 && "Freshness Delivered to Your Doorstep"}
+            {currentIndex === 1 && "Handpicked Organic Goodness"}
+            {currentIndex === 2 && "Taste the Sweetness of Nature"}
           </motion.h1>
+
           <motion.p
-            className="text-lg md:text-xl text-white mt-3 opacity-90"
+            className="text-sm sm:text-lg md:text-xl text-white mt-2 opacity-90 leading-relaxed max-w-[80%] md:max-w-[60%]"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             {currentIndex === 0 &&
-              "Delivering fresh, high-quality fruits from our trusted farm."}
+              "Discover farm-fresh fruits packed with nutrition and taste."}
             {currentIndex === 1 &&
-              "Sourcing and supplying premium fruits with care."}
+              "We source only the best, organically grown fruits for you."}
             {currentIndex === 2 &&
-              "Exporting farm-fresh fruits across Maharashtra."}
+              "Experience the juiciest, most delicious seasonal picks."}
           </motion.p>
 
           {/* CTA Button */}
-          <motion.a
-            href={currentIndex === 0 ? "/shop" : "/about"}
-            className="mt-6 px-8 py-3 text-lg font-semibold text-white bg-green-600 rounded-full shadow-lg transition-all hover:bg-green-700"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-          >
-            {currentIndex === 0 ? "Shop Now" : "Learn More"}
-          </motion.a>
+          <Link to={currentIndex === 0 ? "/shop" : "/about"}>
+            <motion.a
+              className="mt-4 px-6 py-2 sm:px-8 sm:py-3 text-sm sm:text-lg font-semibold text-white bg-green-600 rounded-full shadow-lg transition-all hover:bg-green-700 self-center w-full max-w-[250px] text-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+            >
+              {currentIndex === 0 ? "Shop Now" : "Learn More"}
+            </motion.a>
+          </Link>
         </div>
 
         {/* Navigation Buttons */}
         <button
           onClick={prevSlide}
-          className="absolute left-6 z-10 bg-black/30 text-white p-4 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
+          className="absolute left-3 md:left-6 z-10 bg-black/30 text-white p-2 sm:p-4 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
         >
           ❮
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-6 z-10 bg-black/30 text-white p-4 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
+          className="absolute right-3 md:right-6 z-10 bg-black/30 text-white p-2 sm:p-4 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
         >
           ❯
         </button>
 
         {/* Indicators */}
-        <div className="absolute bottom-6 flex gap-2">
+        <div className="absolute bottom-4 sm:bottom-6 flex gap-2">
           {images.map((_, index) => (
             <div
               key={index}
-              className={`w-3 h-3 rounded-full transition-all ${
+              className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all ${
                 index === currentIndex
                   ? "bg-white scale-125 shadow-lg"
                   : "bg-gray-400 opacity-70"
@@ -148,31 +153,33 @@ export const Impex = () => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center p-10 font-sans w-full">
-        <div className="flex items-center max-w-18xl gap-10  p-11 rounded-lg">
-          <div className="w-full">
+      <div className="flex flex-col items-center p-6 md:p-10 font-sans w-full">
+        <div className="flex flex-col md:flex-row items-center max-w-6xl gap-6 md:gap-10 p-6 md:p-11 rounded-lg">
+          <div className="w-full md:w-1/2">
             <img
               src={images[0]}
               alt="Business Meeting"
               className="w-full h-auto rounded-lg"
             />
           </div>
-          <div className="max-w-2xl">
-            <h2 className="text-2xl text-gray-900 font-bold">
+          <div className="w-full md:w-1/2">
+            <h2 className="text-xl md:text-2xl text-gray-900 font-bold text-center md:text-left">
               Welcome to GrowPhal
             </h2>
-            <p className="text-lg text-gray-600 mt-2">
+            <p className="text-base md:text-lg text-gray-600 mt-2 text-center md:text-left">
               Established in 2024, GrowPhal is a trusted name in the fruit
               export industry. Based in Navi Mumbai, Maharashtra, we specialize
               in providing high-quality fruits to markets across Maharashtra.
             </p>
-            <button
-              className="bg-[#ffb84d] text-white px-5 py-2 mt-3 rounded-md hover:bg-[#ffa00a] transition-all"
-              onClick={() => navigate("/about")}
-            >
-              View more
-            </button>
-            <div className="flex justify-between gap-10 mt-8">
+            <div className="flex justify-center md:justify-start">
+              <button
+                className="bg-[#ffb84d] text-white px-4 py-2 mt-3 rounded-md hover:bg-[#ffa00a] transition-all"
+                onClick={() => navigate("/about")}
+              >
+                View more
+              </button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
               {[
                 {
                   icon: "📦",
@@ -197,11 +204,15 @@ export const Impex = () => {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="flex-1 p-4 bg-gray-100 rounded-lg text-center flex flex-col items-center min-h-40"
+                  className="flex flex-col items-center p-4 bg-gray-100 rounded-lg text-center min-h-32"
                 >
-                  <span className="text-2xl">{item.icon}</span>
-                  <h4 className="font-semibold mt-2">{item.title}</h4>
-                  <p className="text-gray-700">{item.description}</p>
+                  <span className="text-xl md:text-2xl">{item.icon}</span>
+                  <h4 className="font-semibold mt-2 text-sm md:text-base">
+                    {item.title}
+                  </h4>
+                  <p className="text-gray-700 text-xs md:text-sm">
+                    {item.description}
+                  </p>
                 </div>
               ))}
             </div>
