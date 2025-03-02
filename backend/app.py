@@ -76,9 +76,12 @@ def get_config_details():
 
 @app.route('/api/admincheck', methods=['POST'])
 def get_admin_details():
-    data = request.json
-    admin = admin_check(data)
-    return jsonify(admin), 200
+    try:
+        data = request.json
+        admin = admin_check(data)
+        return jsonify(admin), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/newsletter', methods=['POST'])
 def add_to_newsletter():

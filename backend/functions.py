@@ -150,8 +150,11 @@ def admin_check(data):
     user_name = {
         "user_name": data["username"]
     }
-    users = users_collection.find(user_name)
-    return users
+    users = users_collection.find_one(user_name)
+    if users :
+        return users
+    return None
+    
 
 def submit_enquiries(enquiry_data):
     enquiries_collection = mongo_db["enquiries"]
