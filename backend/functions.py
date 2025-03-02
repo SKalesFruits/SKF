@@ -160,7 +160,7 @@ def get_orders():
 
 def fetch_orders(data):
     orders_collection = mongo_db["orders"]
-    orders = list(orders_collection.find({"username": data["username"]})) # Filter based on username
+    orders = list(orders_collection.find({"userName": data["username"]})) # Filter based on username
     for order in orders:
         order['_id'] = str(order['_id'])
         order['orderId'] = str(order['orderId'])
