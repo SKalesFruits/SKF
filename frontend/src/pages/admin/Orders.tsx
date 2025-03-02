@@ -49,7 +49,7 @@ export const Orders = () => {
             >
               <option value="all">All Orders</option>
               <option value="pending">Pending</option>
-              <option value="processing">Processing</option>
+              <option value="shipping">Shipping</option>
               <option value="delivered">Delivered</option>
               <option value="cancelled">Cancelled</option>
             </select>
@@ -111,7 +111,7 @@ export const Orders = () => {
                       className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                         {
                           pending: "bg-yellow-100 text-yellow-800",
-                          processing: "bg-blue-100 text-blue-800",
+                          shipping: "bg-blue-100 text-blue-800",
                           delivered: "bg-green-100 text-green-800",
                           cancelled: "bg-red-100 text-red-800",
                         }[order.currentStatus]

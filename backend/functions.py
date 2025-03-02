@@ -158,6 +158,14 @@ def get_orders():
         order['orderId'] = str(order['orderId'])
     return orders
 
+def fetch_orders(data):
+    orders_collection = mongo_db["orders"]
+    orders = list(orders_collection.find({"username": data["username"]})) # Filter based on username
+    for order in orders:
+        order['_id'] = str(order['_id'])
+        order['orderId'] = str(order['orderId'])
+    return orders
+
 def get_order_by_id(order_id):
     order = mongo_db.orders.find_one({'_id': ObjectId(order_id)})
     if order:

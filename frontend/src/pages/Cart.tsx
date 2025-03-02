@@ -6,6 +6,7 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { deliverycities } from "../data/cities";
 import { Cities } from "../types";
+import toast from "react-hot-toast";
 
 export const Cart = () => {
   const { state, dispatch } = useCart();
@@ -103,6 +104,15 @@ export const Cart = () => {
             setIsOrderPopupVisible(true);
             dispatch({ type: "CLEAR_CART" });
             setTimeout(() => setIsOrderPopupVisible(false), 4000);
+            toast.success("Order successfully Placed!", {
+              duration: 5000, // Optional: controls how long the toast stays
+              position: "top-right",
+              style: {
+                background: "#4CAF50",
+                color: "#fff",
+              },
+              icon: "🌟",
+            });
             navigate("/shop");
           } catch (error) {
             console.error("Error verifying payment:", error);

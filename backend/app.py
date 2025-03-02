@@ -53,6 +53,12 @@ def get_all_orders():
     orders = get_orders()
     return jsonify(orders), 200
 
+@app.route('/api/fetchordersbyusername', methods=['POST'])
+def fetch_orders_using_username():
+    data = request.json
+    orders = fetch_orders(data)
+    return jsonify(orders), 200
+
 @app.route('/api/reviews', methods=['GET'])
 def get_all_reviews():
     reviews = get_reviews()
@@ -179,7 +185,7 @@ def verify_payment():
             "orderId": data["razorpay_order_id"],
             "userName": data["userName"],
             "dateOfOrderPlaced": datetime.utcnow().isoformat(),
-            "currentStatus": "Processing",
+            "currentStatus": "pending",
             "orderLocation": data["orderLocation"],
             "orderAddress": data["orderAddress"],
             "totalOrderAmount": data["totalOrderAmount"],

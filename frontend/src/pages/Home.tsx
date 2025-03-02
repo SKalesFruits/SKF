@@ -62,44 +62,24 @@ export const Home = () => {
     <div className="min-h-screen overflow-x-hidden">
       {/* Hero Section */}
 
-      <div className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
+      <div className="relative w-full h-[80vh] md:h-[60vh] sm:h-[50vh] flex items-center justify-center overflow-hidden">
         <AnimatePresence>
-          {/* <motion.img
-            key={currentIndex}
-            src={images[currentIndex]}
-            alt="Hero Slide"
-            className="absolute w-full h-full object-cover"
-            initial={{ opacity: 0, rotateX: 10, scale: 1.05 }} // Small perspective tilt
-            animate={{ opacity: 1, rotateX: 0, scale: 1 }} // Comes to normal view
-            exit={{ opacity: 0, rotateX: -10, scale: 1.02 }} // Tilts out subtly
-            transition={{ duration: 0.85, ease: "easeOut" }} // Smooth out
-          /> */}
           <motion.img
             key={currentIndex}
             src={images[currentIndex]}
             alt="Hero Slide"
             className="absolute w-full h-full object-cover"
-            initial={{ opacity: 0, filter: "blur(10px)", scale: 1.08 }} // Starts blurred
-            animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }} // Becomes clear
-            exit={{ opacity: 0, filter: "blur(10px)", scale: 1.02 }} // Slight blur on exit
+            initial={{ opacity: 0, filter: "blur(10px)", scale: 1.08 }}
+            animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+            exit={{ opacity: 0, filter: "blur(10px)", scale: 1.02 }}
             transition={{ duration: 0.9, ease: "easeInOut" }}
           />
-          {/* <motion.img
-            key={currentIndex}
-            src={images[currentIndex]}
-            alt="Hero Slide"
-            className="absolute w-full h-full object-cover hero-slide"
-            initial={{ opacity: 0, x: 50, scale: 1.05 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -50, scale: 1.02 }}
-            transition={{ duration: 0.9, ease: "easeOut" }}
-          /> */}
         </AnimatePresence>
 
         {/* Text Overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
           <motion.h1
-            className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg"
+            className="text-4xl md:text-3xl sm:text-2xl font-bold text-white drop-shadow-lg"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -110,7 +90,7 @@ export const Home = () => {
             {currentIndex === 2 && "Taste the Sweetness of Nature"}
           </motion.h1>
           <motion.p
-            className="text-lg md:text-xl text-white mt-3 opacity-90"
+            className="text-lg md:text-base sm:text-sm text-white mt-3 opacity-90"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -127,7 +107,7 @@ export const Home = () => {
           {/* CTA Button */}
           <motion.a
             href={currentIndex === 0 ? "/shop" : "/about"}
-            className="mt-6 px-8 py-3 text-lg font-semibold text-white bg-green-600 rounded-full shadow-lg transition-all hover:bg-green-700"
+            className="mt-6 px-8 py-3 text-lg md:text-base sm:text-sm font-semibold text-white bg-green-600 rounded-full shadow-lg transition-all hover:bg-green-700"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
@@ -138,24 +118,26 @@ export const Home = () => {
 
         {/* Navigation Buttons */}
         <button
+          id="hero-button"
           onClick={prevSlide}
-          className="absolute left-6 z-10 bg-black/30 text-white p-4 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
+          className="absolute left-4 sm:left-2 z-10 bg-black/30 text-white p-3 md:p-2 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
         >
           ❮
         </button>
         <button
+          id="hero-button"
           onClick={nextSlide}
-          className="absolute right-6 z-10 bg-black/30 text-white p-4 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
+          className="absolute right-4 sm:right-2 z-10 bg-black/30 text-white p-3 md:p-2 rounded-full backdrop-blur-md transition-transform transform hover:scale-110 hover:bg-black/50"
         >
           ❯
         </button>
 
         {/* Indicators */}
-        <div className="absolute bottom-6 flex gap-2">
+        <div className="absolute bottom-4 flex gap-2">
           {images.map((_, index) => (
             <div
               key={index}
-              className={`w-3 h-3 rounded-full transition-all ${
+              className={`w-3 h-3 md:w-2.5 md:h-2.5 rounded-full transition-all ${
                 index === currentIndex
                   ? "bg-white scale-125 shadow-lg"
                   : "bg-gray-400 opacity-70"

@@ -87,14 +87,14 @@ export const Navbar = () => {
               ))}
               <Link to="/cart" className="relative">
                 <motion.div whileHover={{ scale: 1.1 }}>
-                  <ShoppingCart className="h-6 w-6 text-white hover:text-fruit-red transition-colors" />
+                  <ShoppingCart className="h-6 w-6 text-white hover:text-white:600 transition-colors" />
                   <AnimatePresence>
                     {state.items.length > 0 && (
                       <motion.span
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         exit={{ scale: 0 }}
-                        className="absolute -top-2 -right-2 bg-fruit-red text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                        className="absolute -top-2 -right-2 bg-[#ffffff] text-[#F77F00] rounded-full w-4 h-4 flex items-center justify-center text-xs"
                       >
                         {state.items.length}
                       </motion.span>
@@ -144,8 +144,8 @@ export const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className={`block px-3 py-2 rounded-md text-base font-medium ${
                       location.pathname === link.path
-                        ? "text-[#ffffff] bg-[#ffffff]"
-                        : "text-[#ffffff] hover:text-[#ffffff] hover:bg-[#ffffff]"
+                        ? "text-[#FFFFFF] bg-[#000000]"
+                        : "text-gray-600 hover:text-[#ffffff] hover:bg-[#000000]"
                     }`}
                   >
                     {link.label}
