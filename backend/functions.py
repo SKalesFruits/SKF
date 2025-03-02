@@ -145,6 +145,14 @@ def get_config():
         config['_id'] = str(config['_id'])
     return configs
 
+def admin_check(data):
+    users_collection = mongo_db["users"]
+    user_name = {
+        "user_name": data["username"]
+    }
+    users = users_collection.find(user_name)
+    return users
+
 def submit_enquiries(enquiry_data):
     enquiries_collection = mongo_db["enquiries"]
     enquiries_collection.insert_one(enquiry_data)

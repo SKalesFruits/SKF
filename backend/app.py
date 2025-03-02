@@ -74,6 +74,12 @@ def get_config_details():
     config = get_config()
     return jsonify(config), 200
 
+@app.route('/api/admincheck', methods=['POST'])
+def get_admin_details():
+    data = request.json
+    admin = admin_check(data)
+    return jsonify(admin), 200
+
 @app.route('/api/newsletter', methods=['POST'])
 def add_to_newsletter():
     try:
