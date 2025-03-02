@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Package, Truck, CheckCircle } from "lucide-react";
 import { Order, Product } from "../types";
-import { orders } from "../data/order";
+import { fetchordersbyusername } from "../data/fetchordersbyusername";
 import { products } from "../data/products";
 
 // const mockOrders = [
@@ -27,7 +27,7 @@ export const Orders = () => {
       let username = sessionStorage.getItem("userName");
       const res = await products();
       setItems(res);
-      const restwo = await orders(username);
+      const restwo = await fetchordersbyusername(username);
       setOrders(restwo);
     };
     getProducts();
