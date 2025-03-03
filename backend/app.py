@@ -24,10 +24,10 @@ def signup():
 
 @app.route('/api/auth/login', methods=['POST'])
 def login():
-    data = request.form
+    data = request.json
     try:
-        token = authenticate_user(data.get('username'), data.get('password'))
-        return jsonify({'access_token': token, 'token_type': 'bearer'}), 200
+        token = authenticate_user(data['username'], data['password'])
+        return jsonify(token), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 401
 

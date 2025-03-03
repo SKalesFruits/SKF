@@ -57,7 +57,7 @@ export const Navbar = () => {
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.5 }}
               ></motion.div>
-              <span className="text-xl font-bold bg-gradient-to-r from-[#FFFFFF] to-[#000000] bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r from-[#FFFFFF] to-[#FFF200] bg-clip-text text-transparent">
                 {/* <img src={Logo} id="logo-gr"></img> */}
                 {/* <img src={LogoOne} id="logo-gr"></img> */}
                 <img src={LogoTwo} id="logo-gr"></img>
@@ -176,8 +176,8 @@ export const Navbar = () => {
                         onClick={() => setIsOpen(false)}
                         className={`block px-3 py-2 rounded-md text-base font-medium ${
                           location.pathname === link.path
-                            ? "text-[#FFFFFF] bg-[#000000]"
-                            : "text-gray-600 hover:text-[#ffffff] hover:bg-[#000000]"
+                            ? "text-[#FFFFFF] bg-[#FFF200]"
+                            : "text-gray-600 hover:text-[#ffffff] hover:bg-[#FFF200]"
                         }`}
                       >
                         {link.label}
@@ -189,8 +189,8 @@ export const Navbar = () => {
                   onClick={() => setIsOpen(false)}
                   className={`block px-3 py-2 rounded-md text-base font-medium ${
                     isActive("/cart")
-                      ? "text-[#FFFFFF] bg-[#000000]"
-                      : "text-gray-600 hover:text-[#000000] hover:bg-[#FFFFFF]"
+                      ? "text-[#FFFFFF] bg-[#FFF200]"
+                      : "text-gray-600 hover:text-[#FFF200] hover:bg-[#FFFFFF]"
                   }`}
                 >
                   Cart ({state.items.length})
@@ -200,14 +200,14 @@ export const Navbar = () => {
                     <Link
                       to="/profile"
                       onClick={() => setIsOpen(false)}
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#000000]"
+                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#FFF200]"
                     >
                       Profile
                     </Link>
                     <Link
                       to="/orders"
                       onClick={() => setIsOpen(false)}
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#000000]"
+                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#FFF200]"
                     >
                       My Orders
                     </Link>
@@ -216,7 +216,7 @@ export const Navbar = () => {
                   <Link
                     to="/login"
                     onClick={() => setIsOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#000000
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#FFFFFF] hover:bg-[#FFF200
                     ]"
                   >
                     Sign In

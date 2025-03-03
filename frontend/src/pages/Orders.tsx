@@ -55,73 +55,79 @@ export const Orders = () => {
         <h1 className="text-2xl font-bold mb-6">My Orders</h1>
 
         <div className="space-y-6">
-          {orderlist.map((order) => (
-            <motion.div
-              key={order.orderId}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-sm overflow-hidden"
-            >
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <p className="text-sm text-gray-500">
-                      Order #{order.orderId}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(order.dateOfOrderPlaced).toLocaleDateString()}
-                    </p>
+          {orderlist.length > 0 ? (
+            orderlist.map((order) => (
+              <motion.div
+                key={order.orderId}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-xl shadow-sm overflow-hidden"
+              >
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <p className="text-sm text-gray-500">
+                        Order #{order.orderId}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {new Date(order.dateOfOrderPlaced).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {getStatusIcon(order.currentStatus)}
+                      <span className="text-sm font-medium capitalize">
+                        {order.currentStatus}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {getStatusIcon(order.currentStatus)}
-                    <span className="text-sm font-medium capitalize">
-                      {order.currentStatus}
+
+                  <div className="border-t pt-4">
+                    {order.items.map((item, index) => {
+                      const match = item.match(/(.+) \( x (\d+)\)/);
+                      let itemName = "";
+                      let itemQuantity = 0;
+                      if (match) {
+                        itemName = match[1].trim();
+                        itemQuantity = parseInt(match[2], 10);
+                      }
+                      const product = items.find((p) => p.name === itemName);
+                      let price = 0;
+                      if (product) {
+                        price = product.price;
+                      }
+                      return (
+                        <div
+                          key={index}
+                          className="flex justify-between items-center py-2"
+                        >
+                          <div>
+                            <p className="font-medium">{itemName}</p>
+                            <p className="text-sm text-gray-500">
+                              Quantity: {itemQuantity}
+                            </p>
+                          </div>
+                          <p className="font-medium">
+                            ₹{(price * itemQuantity).toFixed(2)}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="border-t mt-4 pt-4 flex justify-between items-center">
+                    <span className="font-medium">Total</span>
+                    <span className="font-bold text-lg">
+                      ₹{order.totalOrderAmount.toFixed(2)}
                     </span>
                   </div>
                 </div>
-
-                <div className="border-t pt-4">
-                  {order.items.map((item, index) => {
-                    const match = item.match(/(.+) \( x (\d+)\)/);
-                    let itemName = "";
-                    let itemQuantity = 0;
-                    if (match) {
-                      itemName = match[1].trim();
-                      itemQuantity = parseInt(match[2], 10);
-                    }
-                    const product = items.find((p) => p.name === itemName);
-                    let price = 0;
-                    if (product) {
-                      price = product.price;
-                    }
-                    return (
-                      <div
-                        key={index}
-                        className="flex justify-between items-center py-2"
-                      >
-                        <div>
-                          <p className="font-medium">{itemName}</p>
-                          <p className="text-sm text-gray-500">
-                            Quantity: {itemQuantity}
-                          </p>
-                        </div>
-                        <p className="font-medium">
-                          ₹{(price * itemQuantity).toFixed(2)}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="border-t mt-4 pt-4 flex justify-between items-center">
-                  <span className="font-medium">Total</span>
-                  <span className="font-bold text-lg">
-                    ₹{order.totalOrderAmount.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))
+          ) : (
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden h-48 justify-center flex items-center">
+              No past Orders for you
+            </div>
+          )}
         </div>
       </div>
     </div>

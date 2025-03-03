@@ -149,8 +149,8 @@ export const Inventory: React.FC = () => {
         <input
           type="number"
           name="price"
-          placeholder="Price"
-          value={newProduct.price}
+          placeholder="Selling Price"
+          value={newProduct.price !== 0 ? newProduct.price : ""}
           onChange={handleInputChange}
           className="p-2 border rounded w-full mb-2"
         />
@@ -158,7 +158,7 @@ export const Inventory: React.FC = () => {
           type="number"
           name="buying_price"
           placeholder="Buying/Manufacture Price"
-          value={newProduct.buying_price}
+          value={newProduct.buying_price !== 0 ? newProduct.buying_price : ""}
           onChange={handleInputChange}
           className="p-2 border rounded w-full mb-2"
         />
@@ -189,7 +189,7 @@ export const Inventory: React.FC = () => {
           type="number"
           name="stock"
           placeholder="Stock"
-          value={newProduct.stock}
+          value={newProduct.stock !== 0 ? newProduct.stock : ""}
           onChange={handleInputChange}
           className="p-2 border rounded w-full mb-2"
         />

@@ -54,24 +54,39 @@ export const AuthForm = () => {
             user_pincode: pincode,
             user_type: "user",
           }
-        : { user_email: email, user_password: password };
+        : { username: email, password: password };
 
       const response = await axios.post(url, payload);
 
       if (response.status === 200 || response.status === 201) {
-        sessionStorage.setItem("logged_in_user", name);
-        sessionStorage.setItem("logged_in_email", email);
+        sessionStorage.setItem(
+          "logged_in_user",
+          name !== "" ? name : response.data["user_name"]
+        );
+        sessionStorage.setItem(
+          "logged_in_email",
+          email !== "" ? email : response.data["user_email"]
+        );
         sessionStorage.setItem("logged_in_usertype", "user");
-        sessionStorage.setItem("logged_in_user_address", address);
-        sessionStorage.setItem("logged_in_user_pincode", pincode);
-        sessionStorage.setItem("logged_in_user_city", orderLocation);
+        sessionStorage.setItem(
+          "logged_in_user_address",
+          address !== "" ? address : response.data["user_address"]
+        );
+        sessionStorage.setItem(
+          "logged_in_user_pincode",
+          pincode !== "" ? pincode : response.data["user_pincode"]
+        );
+        sessionStorage.setItem(
+          "logged_in_user_city",
+          orderLocation !== "" ? orderLocation : response.data["user_city"]
+        );
         navigate("/");
         toast.success(
           `Welcome ${sessionStorage.getItem("logged_in_user") || "User"}!`,
           {
             duration: 5000,
             position: "top-right",
-            style: { background: "#F77F00", color: "#fff" },
+            style: { background: "#4287f5", color: "#fff" },
             icon: "🤝",
           }
         );

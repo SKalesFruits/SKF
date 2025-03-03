@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson import ObjectId
-from config import mongo_db, JWT_SECRET_KEY
+from config import *
 from flask import jsonify
 
 # Auth Functions
@@ -41,15 +41,15 @@ def create_user(data):
     return user
 
 def authenticate_user(email, password):
-    user = mongo_db.users.find_one({'email': email})
-    if not user or not check_password_hash(user['hashed_password'], password):
+    user = mongo_db.users.find_one({'user_email': email})
+    if not user or not check_password_hash(user['user_password_hashed'], password):
         raise Exception('Invalid email or password')
-    
-    token_data = {
-        'sub': str(user['_id']),
-        'exp': datetime.utcnow() + timedelta(minutes=30)
-    }
-    return jwt.encode(token_data, JWT_SECRET_KEY, algorithm='HS256')
+
+    # Convert ObjectId to string
+    user['_id'] = str(user['_id'])
+
+    return user  # Now, the _id field is JSON serializable
+
 
 # Product Functions
 def get_products(category=None, seasonal=None, organic=None):
