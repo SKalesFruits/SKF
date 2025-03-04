@@ -113,6 +113,72 @@ export const ProductDetails = () => {
   return (
     <div className="min-h-screen pb-10">
       <div className="max-w-7xl mx-auto px-4">
+        {isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm z-50">
+            <div className="bg-white bg-opacity-95 p-6 rounded-lg shadow-2xl w-96 backdrop-filter backdrop-blur-lg">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                Enter Enquiry Details
+              </h2>
+              <input
+                type="text"
+                placeholder="Enter your Name / Business Name"
+                className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Enter your Contact Number"
+                className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                value={mobileNumber}
+                onChange={(e) => setMobileNumberEnq(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Enter your Email"
+                className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Enter your contact"
+                className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                value={productSelected}
+                readOnly
+              />
+              <span>
+                <input
+                  placeholder="Enter Quantity"
+                  type="number"
+                  className="w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                  value={quantity}
+                  onChange={(e) => setQuantity(parseInt(e.target.value))}
+                />
+                <textarea
+                  placeholder="Enter full address"
+                  className="w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                  value={measurementUnit}
+                  readOnly
+                />
+              </span>
+              <div className="flex justify-end space-x-3">
+                <button
+                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors font-semibold"
+                  onClick={sendEnquiry}
+                >
+                  Confirm &amp; Proceed
+                </button>
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors font-semibold"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 md:p-8">
             <motion.div
