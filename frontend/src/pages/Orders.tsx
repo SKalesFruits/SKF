@@ -24,9 +24,9 @@ export const Orders = () => {
   const [items, setItems] = useState<Product[]>([]);
   useEffect(() => {
     const getProducts = async () => {
-      let username = sessionStorage.getItem("userName");
+      let username = localStorage.getItem("userName");
       if (username === null) {
-        username = sessionStorage.getItem("logged_in_user");
+        username = localStorage.getItem("logged_in_user");
       }
       const res = await products();
       setItems(res);

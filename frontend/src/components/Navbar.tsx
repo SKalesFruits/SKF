@@ -34,13 +34,13 @@ export const Navbar = () => {
       const response: AxiosResponse<UserDetails> = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/api/admincheck`,
         {
-          username: sessionStorage.getItem("logged_in_user"),
+          username: localStorage.getItem("logged_in_user"),
         }
       );
       setIsAdmin(response.data.is_admin);
     };
-    console.log(sessionStorage.getItem("logged_in_user"));
-    if (sessionStorage.getItem("logged_in_user") !== null) {
+    console.log(localStorage.getItem("logged_in_user"));
+    if (localStorage.getItem("logged_in_user") !== null) {
       setUserAuthenticated(true);
       check_admin_status();
     }
@@ -135,9 +135,9 @@ export const Navbar = () => {
                   {authenticated ? (
                     <div className="w-8 h-8 rounded-full flex items-center justify-center border-b border-t border-x">
                       <span className="text-[#FFFFFF] font-medium">
-                        {sessionStorage.getItem("userName") === null
-                          ? sessionStorage.getItem("logged_in_user")?.charAt(0)
-                          : sessionStorage.getItem("userName")?.charAt(0)}
+                        {localStorage.getItem("userName") === null
+                          ? localStorage.getItem("logged_in_user")?.charAt(0)
+                          : localStorage.getItem("userName")?.charAt(0)}
                       </span>
                     </div>
                   ) : (

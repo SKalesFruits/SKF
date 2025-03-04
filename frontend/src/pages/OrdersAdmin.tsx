@@ -3,11 +3,20 @@ import { motion } from "framer-motion";
 import { Search, Filter } from "lucide-react";
 import { orders } from "../data/order";
 import { Order } from "../types";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export const OrdersAdmin = () => {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [orderlist, setOrders] = useState<Order[]>([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [orderStatus, setOrderStatus] = useState("");
+  const [orderId, setOrderId] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [date, setDate] = useState("");
+  const [address, setAddress] = useState("");
+  const [orderLocation, setOrderLocation] = useState("");
 
   useEffect(() => {
     const getProducts = async () => {
@@ -24,10 +33,108 @@ export const OrdersAdmin = () => {
     );
   });
 
+  const handleDetails = (orderDetails: Order) => {
+    setOrderId(orderDetails.orderId);
+    setCustomerName(orderDetails.userName);
+    setDate(orderDetails.dateOfOrderPlaced);
+    setOrderLocation(orderDetails.orderLocation);
+    setAddress(orderDetails.orderAddress);
+  };
+
+  const validateAndProceed = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/api/updateorderstatus`,
+        {
+          status: orderStatus,
+          order_id: orderId,
+        }
+      );
+      console.log(response.data);
+      toast.success(`Order Status Updated`, {
+        duration: 5000,
+        position: "top-right",
+        style: { background: "#4287f5", color: "#fff" },
+        icon: "🚀",
+      });
+      setModalOpen(false);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const statusList = ["Pending", "Shipping", "Delivered", "Cancelled"];
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Order Management</h1>
-
+      {modalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm z-50">
+          <div className="bg-white bg-opacity-95 p-6 rounded-lg shadow-2xl w-96 backdrop-filter backdrop-blur-lg">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              Enter Order Details
+            </h2>
+            <input
+              type="text"
+              placeholder="Enter your name"
+              className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              value={orderId}
+              readOnly
+            />
+            <select
+              className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              value={orderStatus}
+              onChange={(e) => setOrderStatus(e.target.value)}
+            >
+              {statusList.map((item, index) => (
+                <option key={index} value={item.toLowerCase()}>
+                  {item}
+                </option>
+              ))}
+            </select>
+            <input
+              type="text"
+              placeholder="Enter your contact"
+              className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              value={address}
+              readOnly
+            />
+            <input
+              type="text"
+              placeholder="Enter your contact"
+              className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              value={orderLocation}
+              readOnly
+            />
+            <input
+              type="text"
+              placeholder="Enter your contact"
+              className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              value={customerName}
+              readOnly
+            />
+            <textarea
+              placeholder="Enter full address"
+              className="w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              value={date}
+              readOnly
+            />
+            <div className="flex justify-end space-x-3">
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors font-semibold"
+                onClick={validateAndProceed}
+              >
+                Confirm &amp; Proceed
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors font-semibold"
+                onClick={() => setModalOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="bg-white rounded-xl shadow-sm mb-6">
         <div className="p-4 border-b flex items-center justify-between">
           <div className="relative flex-1 mr-4">
@@ -122,7 +229,13 @@ export const OrdersAdmin = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-fruit-red hover:text-fruit-purple">
+                    <button
+                      className="text-fruit-red hover:text-fruit-purple"
+                      onClick={() => {
+                        setModalOpen(true);
+                        handleDetails(order);
+                      }}
+                    >
                       View Details
                     </button>
                   </td>

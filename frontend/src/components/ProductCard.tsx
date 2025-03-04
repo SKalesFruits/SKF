@@ -41,7 +41,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       payload: { ...product, price: discountedPrice, quantity },
     });
   };
-
+  const stock = product.stock ?? 0;
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -123,14 +123,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         <div className="h-5 mb-3">
-          {product.stock !== undefined && product.stock < 5 && (
+          {stock !== undefined && stock < 5 && stock !== 0 ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="text-red-500 text-xs font-semibold"
             >
-              ⚠️ Only {product.stock} left in stock!
+              ⚠️ Only {stock} left in stock!
             </motion.div>
+          ) : (
+            stock === 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-red-500 text-xs font-semibold"
+              >
+                ⚠️We will be restocking the product soon!
+              </motion.div>
+            )
           )}
         </div>
 
@@ -140,13 +150,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               className="p-2 hover:bg-gray-100 transition-all"
+              disabled={quantity === 1} // Prevent going below 1
             >
               <Minus className="h-4 w-4" />
             </button>
             <span className="px-4 py-2 border-x">{quantity}</span>
             <button
-              onClick={() => setQuantity(quantity + 1)}
+              onClick={() =>
+                setQuantity((prev) => (prev < stock ? prev + 1 : prev))
+              }
               className="p-2 hover:bg-gray-100 transition-all"
+              disabled={quantity >= stock} // Prevent exceeding stock
             >
               <Plus className="h-4 w-4" />
             </button>
@@ -157,11 +171,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={handleAddToCart}
-          className="w-full bg-gradient-to-r from-fruit-red to-fruit-red text-white py-3 rounded-xl hover:from-fruit-purple hover:to-fruit-red transition-all duration-300 flex items-center justify-center gap-2 font-medium"
+          onClick={() => {
+            if (quantity <= stock) {
+              handleAddToCart();
+            }
+          }}
+          disabled={stock === 0} // Disable when out of stock
+          className={`w-full ${
+            stock === 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-gradient-to-r from-fruit-red to-fruit-red hover:from-fruit-purple hover:to-fruit-red transition-all duration-300"
+          } text-white py-3 rounded-xl flex items-center justify-center gap-2 font-medium`}
         >
           <ShoppingCart className="h-4 w-4" />
-          Add to Cart
+          {stock === 0 ? "Out of Stock" : "Add to Cart"}
         </motion.button>
       </div>
     </motion.div>

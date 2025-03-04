@@ -216,6 +216,13 @@ def get_delivery_agents():
         agent['_id'] = str(agent['_id'])
     return agents
 
+def get_newsletters():
+    newsletters = list(mongo_db["newsletter"].find())
+    arr = []
+    for agent in newsletters:
+        arr.append(agent["email_id"])
+    return arr
+
 def update_delivery_agent(agent_id, data):
     result = mongo_db.delivery_agents.update_one(
         {'_id': ObjectId(agent_id)},
@@ -226,3 +233,103 @@ def update_delivery_agent(agent_id, data):
         agent['_id'] = str(agent['_id'])
         return agent
     return None
+
+def update_status(data):
+    try:
+        order_collection = mongo_db["orders"]
+        product = order_collection.find_one({"orderId": data["order_id"]})
+        order_collection.update_one(
+            {"orderId": product["orderId"]},
+            {"$set":{"currentStatus": data["status"]}}
+        )
+        return jsonify("Successfully Updated the Order Status")
+    except Exception as e:
+        return None
+
+def update_config(data):
+    try:
+        order_collection = mongo_db["configParams"]
+        product = order_collection.find_one({"config_name": data["config_name"]})
+        order_collection.update_one(
+            {"config_name": product["config_name"]},
+            {"$set":{"config_value": data["config_value"]}}
+        )
+        return jsonify("Successfully Updated the Order Status")
+    except Exception as e:
+        return None
+
+def get_previous_stats():
+    """Fetches previous and current month statistics from MongoDB"""
+
+    orders_collection = mongo_db["orders"]
+    products_collection = mongo_db["products"]
+
+    # Get current month and previous month date range
+    now = datetime.utcnow()
+    first_day_this_month = datetime(now.year, now.month, 1)
+    first_day_last_month = first_day_this_month - timedelta(days=1)
+    first_day_last_month = datetime(first_day_last_month.year, first_day_last_month.month, 1)
+
+    # Fetch data for this month
+    this_month_orders = orders_collection.find({"dateOfOrderPlaced": {"$gte": first_day_this_month}})
+    this_month_revenue = sum(order.get("totalOrderAmount", 0) for order in this_month_orders)
+
+    this_month_active_orders = orders_collection.count_documents(
+        {"currentStatus": "pending", "dateOfOrderPlaced": {"$gte": first_day_this_month}}
+    )
+
+    this_month_total_products = products_collection.count_documents({})
+
+    this_month_profit = 0
+    for order in orders_collection.find({"dateOfOrderPlaced": {"$gte": first_day_this_month}}):
+        for item in order.get("items", []):
+            product_name = item.split(" (")[0]  # Extract product name
+            product = products_collection.find_one({"name": product_name})
+            if product:
+                buying_price = product.get("buying_price", 0)
+                selling_price = product.get("price", 0)
+                this_month_profit += (selling_price - buying_price)
+
+    # Fetch data for last month
+    last_month_orders = orders_collection.find(
+        {"dateOfOrderPlaced": {"$gte": first_day_last_month, "$lt": first_day_this_month}}
+    )
+    last_month_revenue = sum(order.get("totalOrderAmount", 0) for order in last_month_orders)
+
+    last_month_active_orders = orders_collection.count_documents(
+        {"currentStatus": "pending", "dateOfOrderPlaced": {"$gte": first_day_last_month, "$lt": first_day_this_month}}
+    )
+
+    last_month_total_products = products_collection.count_documents({})  # Products don't change per month
+
+    last_month_profit = 0
+    for order in orders_collection.find(
+        {"dateOfOrderPlaced": {"$gte": first_day_last_month, "$lt": first_day_this_month}}
+    ):
+        for item in order.get("items", []):
+            product_name = item.split(" (")[0]  # Extract product name
+            product = products_collection.find_one({"name": product_name})
+            if product:
+                buying_price = product.get("buying_price", 0)
+                selling_price = product.get("price", 0)
+                last_month_profit += (selling_price - buying_price)
+
+    # Function to calculate percentage increase
+    def calculate_percentage_change(current, previous):
+        if previous == 0:
+            return "N/A" if current == 0 else "+100%"
+        change = ((current - previous) / abs(previous)) * 100
+        return f"{change:+.1f}%"
+
+    return jsonify({
+        "totalRevenue": round(this_month_revenue, 2),
+        "activeOrders": this_month_active_orders,
+        "totalProducts": this_month_total_products,
+        "totalProfit": round(this_month_profit, 2),
+
+        # Percentage change
+        "totalRevenueChange": calculate_percentage_change(this_month_revenue, last_month_revenue),
+        "activeOrdersChange": calculate_percentage_change(this_month_active_orders, last_month_active_orders),
+        "totalProductsChange": calculate_percentage_change(this_month_total_products, last_month_total_products),
+        "totalProfitChange": calculate_percentage_change(this_month_profit, last_month_profit),
+    })

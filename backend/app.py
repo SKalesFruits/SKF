@@ -172,10 +172,34 @@ def create_order():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/statsprevious", methods=["GET"])
+def get_stats():
+    previous_stats = get_previous_stats()
+    return previous_stats
+
+@app.route("/api/getnewsletters", methods=["GET"])
+def get_emails():
+    letters = get_newsletters()
+    return letters
+
+@app.route("/api/updateorderstatus", methods=["POST"])
+def update_orderstatus():
+    data = request.json
+    status = update_status(data)
+    if status == None:
+        return jsonify({"error": str(e)}), 500 
+    return status
+
+@app.route("/api/updateconfig",methods=["POST"])
+def update_config_details():
+    data = request.json
+    config = update_config(data)
+    return config
+
 @app.route("/verify-payment", methods=["POST"])
 def verify_payment():
     data = request.json
-
+    products_collection = mongo_db["products"]
     required_fields = ["razorpay_order_id", "razorpay_payment_id", "razorpay_signature", "userName", "orderLocation", "orderAddress", "items", "totalOrderAmount"]
     if not all(field in data for field in required_fields):
         return jsonify({"error": "Missing required fields"}), 400
@@ -188,7 +212,15 @@ def verify_payment():
             "razorpay_signature": data["razorpay_signature"],
         }
         razorclient.utility.verify_payment_signature(params_dict)
-
+        try:
+            for item in data["itemList"]:
+                product = products_collection.find_one({"name": item.get("name")})
+                products_collection.update_one(
+                    {"name": item.get("name")},
+                    {"$set":{"stock": int(product["stock"])-int(item.get("quantity"))}}
+                )
+        except Exception as e:
+            print(e)
         # Create order details
         order_data = {
             "orderId": data["razorpay_order_id"],

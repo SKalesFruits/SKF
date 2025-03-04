@@ -8,7 +8,7 @@ import {
   Send,
   Linkedin,
 } from "lucide-react";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import toast from "react-hot-toast";
 import { getConfigDetailsFromDB } from "../data/config";
 
@@ -19,7 +19,6 @@ export const Footer = () => {
   const [tw_link, settw_link] = useState<any>("");
   const [lkdn_link, setlkdn_link] = useState<any>("");
   const [ig_link, setig_link] = useState<any>("");
-
   useEffect(() => {
     const getConfig = async () => {
       const res = await getConfigDetailsFromDB();
@@ -183,9 +182,26 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t mt-8 pt-8 text-center text-gray-600">
+        <div className="border-t mt-8 pt-8 text-center text-gray-600 flex flex-col md:flex-row items-center justify-between text-sm md:text-base gap-4 md:gap-0">
           <p>
-            &copy; {new Date().getFullYear()} GrowPhal. All rights reserved.
+            <span>
+              &copy; {new Date().getFullYear()} GrowPhal. All rights
+              reserved.&nbsp;&nbsp;
+            </span>
+          </p>
+          <p className="text-xs md:text-sm">
+            Developed & Managed by{" "}
+            <span
+              className="text-fruit-red cursor-pointer hover:text-fruit-purple"
+              onClick={() =>
+                window.open(
+                  "https://www.linkedin.com/in/nimish-thanekar",
+                  "_blank"
+                )
+              }
+            >
+              Nimish Thanekar
+            </span>
           </p>
         </div>
       </div>

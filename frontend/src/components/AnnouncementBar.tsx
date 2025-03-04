@@ -42,10 +42,10 @@ export const AnnouncementBar = () => {
         let updatedItems: any = fin.config_value;
 
         if (mode === "home") {
-          updatedItems.push("🔥 Join the Growphal gang!");
+          updatedItems.push("🔥 Join the GrowPhal gang!");
         } else if (mode === "impex") {
           updatedItems = updatedItems.filter(
-            (item: any) => item !== "🔥 Join the Growphal gang!"
+            (item: any) => item !== "🔥 Join the GrowPhal gang!"
           );
           updatedItems.push(
             "📍 Navi Mumbai, Maharashtra     🏦 GST NO. : 27EMZPP6280A1ZG"

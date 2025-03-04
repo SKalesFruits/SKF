@@ -15,7 +15,7 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
   authenticatedFlag,
 }) => {
   const handleLogout = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     onClose();
     window.location.reload();
   };
@@ -29,13 +29,13 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
           exit={{ opacity: 0, y: -10 }}
           className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 z-50"
         >
-          {sessionStorage.getItem("logged_in_user") && (
+          {localStorage.getItem("logged_in_user") && (
             <div className="px-4 py-2 border-b">
               <p className="text-sm font-medium text-gray-900">
-                {sessionStorage.getItem("logged_in_user")}
+                {localStorage.getItem("logged_in_user")}
               </p>
               <p className="text-xs text-gray-500">
-                {sessionStorage.getItem("logged_in_email")}
+                {localStorage.getItem("logged_in_email")}
               </p>
             </div>
           )}

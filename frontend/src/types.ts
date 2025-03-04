@@ -12,6 +12,17 @@ export interface Product {
   popularity: number;
 }
 
+export interface StatsData {
+  totalRevenue: number;
+  activeOrders: number;
+  totalProducts: number;
+  totalProfit: number;
+  totalRevenueChange: string;
+  activeOrdersChange: string;
+  totalProductsChange: string;
+  totalProfitChange: string;
+}
+
 export interface UserDetails {
   _id: {
     $oid: string;

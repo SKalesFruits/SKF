@@ -14,18 +14,18 @@ export const Cart = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOrderPopupVisible, setIsOrderPopupVisible] = useState(false);
   const [userName, setUserName] = useState(
-    sessionStorage.getItem("logged_in_user") || ""
+    localStorage.getItem("logged_in_user") || ""
   );
   const [citiesList, setCityList] = useState<Cities[]>([]);
   const [emailid, setEmailId] = useState(
-    sessionStorage.getItem("logged_in_email") || ""
+    localStorage.getItem("logged_in_email") || ""
   );
-  const [mobile, setMobile] = useState(sessionStorage.getItem("mobile") || "");
+  const [mobile, setMobile] = useState(localStorage.getItem("mobile") || "");
   const [orderLocation, setOrderLocation] = useState(
-    sessionStorage.getItem("orderLocation") || ""
+    localStorage.getItem("orderLocation") || ""
   );
   const [orderAddress, setOrderAddress] = useState(
-    sessionStorage.getItem("orderAddress") || ""
+    localStorage.getItem("orderAddress") || ""
   );
   const [error, setError] = useState("");
 
@@ -40,9 +40,9 @@ export const Cart = () => {
       return;
     }
 
-    sessionStorage.setItem("userName", userName);
-    sessionStorage.setItem("orderLocation", orderLocation);
-    sessionStorage.setItem("orderAddress", orderAddress);
+    localStorage.setItem("userName", userName);
+    localStorage.setItem("orderLocation", orderLocation);
+    localStorage.setItem("orderAddress", orderAddress);
 
     setIsModalOpen(false);
     handleCheckout();
@@ -98,6 +98,7 @@ export const Cart = () => {
                 items: state.items.map(
                   (item) => `${item.name} ( x ${item.quantity})`
                 ),
+                itemList: state.items,
               }
             );
 
@@ -236,7 +237,7 @@ export const Cart = () => {
               </div>
               <div>
                 <button
-                  className="w-full bg-gradient-to-r from-red-300 to-white-500 to-red-300 text-white font-semibold px-6 py-3 rounded-lg hover:from-red-500 hover:to-red-200 hover:to-red-200 transition-ease-in-out 1.5s"
+                  className="w-full bg-gradient-to-r from-[#F78C1C] to-[#FFA94D] text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:from-[#F96E11] hover:to-[#FFB066] transition-all duration-300 ease-in-out"
                   onClick={() => {
                     if (!userName || !orderLocation || !orderAddress) {
                       setIsModalOpen(true);
