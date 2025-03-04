@@ -12,6 +12,7 @@ export const OrdersAdmin = () => {
   const [orderlist, setOrders] = useState<Order[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [orderStatus, setOrderStatus] = useState("");
+  const [currentOrderStatus, setCurrentOrderStatus] = useState("");
   const [orderId, setOrderId] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [date, setDate] = useState("");
@@ -29,7 +30,9 @@ export const OrdersAdmin = () => {
     if (filter !== "all" && order.currentStatus !== filter) return false;
     return (
       order.userName.toLowerCase().includes(search.toLowerCase()) ||
-      order.orderId.includes(search)
+      order.orderId.toLowerCase().includes(search.toLowerCase()) ||
+      order.orderLocation.toLowerCase().includes(search.toLowerCase()) ||
+      order.currentStatus.toLowerCase().includes(search.toLowerCase())
     );
   });
 
@@ -39,6 +42,7 @@ export const OrdersAdmin = () => {
     setDate(orderDetails.dateOfOrderPlaced);
     setOrderLocation(orderDetails.orderLocation);
     setAddress(orderDetails.orderAddress);
+    setCurrentOrderStatus(orderDetails.currentStatus);
   };
 
   const validateAndProceed = async () => {
@@ -80,17 +84,29 @@ export const OrdersAdmin = () => {
               value={orderId}
               readOnly
             />
-            <select
-              className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-              value={orderStatus}
-              onChange={(e) => setOrderStatus(e.target.value)}
-            >
-              {statusList.map((item, index) => (
-                <option key={index} value={item.toLowerCase()}>
-                  {item}
+            {currentOrderStatus === "cancelled" ? (
+              <select
+                className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                value={orderStatus === "" ? currentOrderStatus : orderStatus}
+                disabled
+              >
+                <option value={currentOrderStatus.toLowerCase()}>
+                  {currentOrderStatus}
                 </option>
-              ))}
-            </select>
+              </select>
+            ) : (
+              <select
+                className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                value={orderStatus === "" ? currentOrderStatus : orderStatus}
+                onChange={(e) => setOrderStatus(e.target.value)}
+              >
+                {statusList.map((item, index) => (
+                  <option key={index} value={item.toLowerCase()}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            )}
             <input
               type="text"
               placeholder="Enter your contact"
@@ -180,6 +196,9 @@ export const OrdersAdmin = () => {
                   Total
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Location
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -212,6 +231,9 @@ export const OrdersAdmin = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ₹{order.totalOrderAmount.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {order.orderLocation}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span

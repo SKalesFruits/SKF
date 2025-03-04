@@ -72,6 +72,7 @@ export interface Order {
   items: Array<string>;
   fleetAssignedId: null;
   fleetAssignedName: null;
+  reason: string;
 }
 
 export interface Coordinates {

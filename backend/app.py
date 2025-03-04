@@ -182,6 +182,14 @@ def get_emails():
     letters = get_newsletters()
     return letters
 
+@app.route("/api/cancelorder", methods=["POST"])
+def cancel_order():
+    data = request.json
+    cancel = cancel_current_order(data)
+    if cancel == None:
+        return jsonify({"error": str(e)}), 500 
+    return cancel
+
 @app.route("/api/updateorderstatus", methods=["POST"])
 def update_orderstatus():
     data = request.json
@@ -233,6 +241,7 @@ def verify_payment():
             "items": data["items"],
             "fleetAssignedId": None,  # Assign later
             "fleetAssignedName": None,  # Assign later
+            "reason":None
         }
 
         # Insert order into MongoDB

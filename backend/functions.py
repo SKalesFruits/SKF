@@ -177,6 +177,18 @@ def fetch_orders(data):
         order['orderId'] = str(order['orderId'])
     return orders
 
+def cancel_current_order(data):
+    try:
+        orders_collection = mongo_db["orders"]
+        orders_collection.update_one(
+            {'orderId': data["orderId"]},
+            {'$set': {'currentStatus': "cancelled",'reason':data["reason"]}}
+        )
+        return jsonify({"message":"Cancellation Successfull"})
+    except Exception as e:
+        print(e)
+        return None
+
 def get_order_by_id(order_id):
     order = mongo_db.orders.find_one({'_id': ObjectId(order_id)})
     if order:
@@ -221,7 +233,7 @@ def get_newsletters():
     arr = []
     for agent in newsletters:
         arr.append(agent["email_id"])
-    return arr
+    return arr 
 
 def update_delivery_agent(agent_id, data):
     result = mongo_db.delivery_agents.update_one(
