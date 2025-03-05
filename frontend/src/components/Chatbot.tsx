@@ -167,7 +167,7 @@ export const Chatbot = () => {
             name: businessDetails.name,
             email: businessDetails.email,
             mobile: businessDetails.phone,
-            enquiry: `My enquiry: ${businessDetails.enquiry}. Quantity Required :${quantity} Kgs`,
+            enquiry: `My enquiry: ${businessDetails.enquiry}. Quantity Required :${quantity} Metric Ton`,
           }),
         }
       );
@@ -319,7 +319,7 @@ export const Chatbot = () => {
                     className="px-5 py-2 m-1 rounded-lg"
                     onChange={(e) => setQuantity(parseInt(e.target.value))}
                   ></input>
-                  <p className="px-5 py-2 m-1 rounded-lg">Kgs</p>
+                  <p className="px-5 py-2 m-1 rounded-lg">Metric Ton</p>
                 </div>
                 {selectedFruits.length > 0 && (
                   <button
