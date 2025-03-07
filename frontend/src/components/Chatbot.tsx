@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 // import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, RefreshCcwIcon } from "lucide-react";
+import {
+  MessageCircle,
+  X,
+  RefreshCcwIcon,
+  MessageCircleIcon,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import toast from "react-hot-toast";
+import { getConfigDetailsFromDB } from "../data/config";
 
 const fruits = ["Apple", "Mango", "Banana", "Grapes", "Orange"];
 
@@ -21,6 +26,7 @@ export const Chatbot = () => {
   const [showFruitSelection, setShowFruitSelection] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [customerOptions, setCustomerOptions] = useState(false);
+  const [phone_num, setPhone_num] = useState<any>(null);
   const [businessDetails, setBusinessDetails] = useState<{
     [key: string]: string;
   }>({
@@ -59,6 +65,14 @@ export const Chatbot = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const details = await getConfigDetailsFromDB();
+      setPhone_num(details.find((item) => item.config_name === "wa_phone_num"));
+    };
+    getProducts();
+  }, []);
 
   const handleSelection = (type: "Business" | "Customer") => {
     setUserType(type);
@@ -221,6 +235,16 @@ export const Chatbot = () => {
             <div className="p-4 bg-[#F77F00] text-white rounded-t-2xl flex justify-between items-center">
               <h3 className="font-semibold">Growफल Assistant</h3>
               <div className="flex justify-around items-center w-20">
+                <button
+                  onClick={() =>
+                    window.open(
+                      `https://wa.me/${phone_num.config_value}?text=Hello%21%20I%20want%20to%20send%20an%20enquiry`,
+                      "_blank"
+                    )
+                  }
+                >
+                  <MessageCircleIcon className="h-5 w-5" />
+                </button>
                 <button onClick={handleResetChat}>
                   <RefreshCcwIcon className="h-5 w-5" />
                 </button>
@@ -298,37 +322,50 @@ export const Chatbot = () => {
               </div>
             )}
             {showFruitSelection && (
-              <div className="p-4 border-t space-y-2">
-                {fruits.map((fruit) => (
+              <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+                <div className="bg-white rounded-lg shadow-md p-4 w-full max-w-md h-[90vh] overflow-y-auto">
+                  <h2 className="text-lg font-semibold text-center mb-2">
+                    Select Fruits
+                  </h2>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {fruits.map((fruit) => (
+                      <button
+                        key={fruit}
+                        className={`px-5 py-2 rounded-lg ${
+                          selectedFruits.includes(fruit)
+                            ? "bg-[#F77F00] text-white"
+                            : "bg-[#E9E1B6] hover:bg-[#F3D250]"
+                        }`}
+                        onClick={() => handleFruitSelect(fruit)}
+                      >
+                        {fruit}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-center mt-4">
+                    <input
+                      type="number"
+                      placeholder="Quantity"
+                      className="px-5 py-2 border rounded-lg text-center w-1/2"
+                      onChange={(e) => setQuantity(parseInt(e.target.value))}
+                    />
+                    <p className="px-5 py-2">Metric Ton</p>
+                  </div>
+                  {selectedFruits.length > 0 && (
+                    <button
+                      onClick={handleConfirmFruits}
+                      className="w-full p-3 bg-[#fcbf49] text-white rounded-lg mt-4"
+                    >
+                      Confirm
+                    </button>
+                  )}
                   <button
-                    key={fruit}
-                    className={`px-5 py-2 m-1 rounded-lg ${
-                      selectedFruits.includes(fruit)
-                        ? "bg-[#F77F00] text-white"
-                        : "bg-[#E9E1B6] hover:bg-[#E9E1B6]"
-                    }`}
-                    onClick={() => handleFruitSelect(fruit)}
+                    onClick={() => setShowFruitSelection(false)}
+                    className="w-full p-2 text-gray-600 mt-2"
                   >
-                    {fruit}
+                    Close
                   </button>
-                ))}
-                <div className="">
-                  <input
-                    type={"number"}
-                    placeholder="Quantity"
-                    className="px-5 py-2 m-1 rounded-lg"
-                    onChange={(e) => setQuantity(parseInt(e.target.value))}
-                  ></input>
-                  <p className="px-5 py-2 m-1 rounded-lg">Metric Ton</p>
                 </div>
-                {selectedFruits.length > 0 && (
-                  <button
-                    onClick={handleConfirmFruits}
-                    className="w-full p-2 bg-[#fcbf49] text-white rounded-lg mt-2"
-                  >
-                    Confirm
-                  </button>
-                )}
               </div>
             )}
 

@@ -7,6 +7,7 @@ import {
   Youtube,
   Send,
   Linkedin,
+  MessageCircleIcon,
 } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -18,6 +19,7 @@ export const Footer = () => {
   const [fb_link, setfb_link] = useState<any>("");
   const [tw_link, settw_link] = useState<any>("");
   const [lkdn_link, setlkdn_link] = useState<any>("");
+  const [phone_num, setPhone_num] = useState<any>(null);
   const [ig_link, setig_link] = useState<any>("");
   useEffect(() => {
     const getConfig = async () => {
@@ -27,12 +29,16 @@ export const Footer = () => {
       const tw_link = res.find((item) => item.config_name === "tw_link");
       const lkdn_link = res.find((item) => item.config_name === "lkdn_link");
       const ig_link = res.find((item) => item.config_name === "ig_link");
-      if (yt_link && fb_link && tw_link && lkdn_link && ig_link) {
+      const phonenum = res.find((item) => item.config_name === "wa_phone_num");
+      if (yt_link && fb_link && tw_link && lkdn_link && ig_link && phonenum) {
         setyt_link(yt_link.config_value);
         setfb_link(fb_link.config_value);
         settw_link(tw_link.config_value);
         setlkdn_link(lkdn_link.config_value);
         setig_link(ig_link.config_value);
+        setPhone_num(
+          phonenum.config_value === null ? 0 : phonenum.config_value
+        );
       }
     };
     getConfig();
@@ -153,6 +159,17 @@ export const Footer = () => {
               >
                 <Linkedin className="h-6 w-6" />
               </a>
+              <a
+                href={`https://wa.me/${phone_num}?text=Hello%21%20I%20want%20to%20send%20an%20enquiry`}
+                className="text-gray-600 hover:text-fruit-red"
+              >
+                <MessageCircleIcon className="h-6 w-6" />
+              </a>
+              {/* <a
+                href={`https://wa.me/${phone_num.config_value}?text=Hello%21%20I%20want%20to%20send%20an%20enquiry`}
+              >
+                <MessageCircleIcon className="h-6 w-6" />
+              </a> */}
             </div>
           </div>
 

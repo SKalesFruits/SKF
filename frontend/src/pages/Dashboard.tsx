@@ -4,7 +4,6 @@ import {
   BarChart3,
   Package,
   Coins,
-  Users,
   IndianRupeeIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";

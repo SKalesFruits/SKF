@@ -94,6 +94,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <span className="text-fruit-red text-xl font-bold block">
               ₹{discountedPrice}
             </span>
+            <span className="text-gray-500 text-xs block mt-1">Per Dozen</span>
           </div>
         </div>
 
@@ -165,6 +166,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               <Plus className="h-4 w-4" />
             </button>
           </div>
+          {/* Per Dozen Label */}
+          <span className="text-gray-500 text-xs">Per Dozen</span>
         </div>
 
         {/* Add to Cart Button */}
