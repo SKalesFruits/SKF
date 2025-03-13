@@ -155,7 +155,7 @@ export const ProductDetails = () => {
                   value={quantity}
                   onChange={(e) => setQuantity(parseInt(e.target.value))}
                 />
-                <textarea
+                <input
                   placeholder="Enter full address"
                   className="w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                   value={measurementUnit}
@@ -225,7 +225,7 @@ export const ProductDetails = () => {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-800 text-sm md:text-base">
                 <p>
-                  <strong>Packaging Type:</strong> Plastic Bag
+                  <strong>Packaging Type:</strong> Corrugated Boxed Packaging
                 </p>
                 <p>
                   <strong>Country of Origin:</strong> India

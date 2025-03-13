@@ -359,7 +359,7 @@ export const Impex = () => {
       <div className="py-20 bg-gradient-to-b from-green-100 to-green-50">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-green-700 mb-6">
-            Find Your Favorite Fruits 🍎🍊🍇
+            Find Your Favourite Fruits 🍎🍊🍇
           </h2>
           <p className="text-lg text-gray-600 mb-8">
             Search for fresh and delicious fruits from our collection!

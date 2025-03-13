@@ -7,9 +7,9 @@ import {
   Youtube,
   Send,
   Linkedin,
-  MessageCircleIcon,
 } from "lucide-react";
 import axios from "axios";
+import WhatsappIcn from "./whatsapp_icn.svg";
 import toast from "react-hot-toast";
 import { getConfigDetailsFromDB } from "../data/config";
 
@@ -163,7 +163,7 @@ export const Footer = () => {
                 href={`https://wa.me/${phone_num}?text=Hello%21%20I%20want%20to%20send%20an%20enquiry`}
                 className="text-gray-600 hover:text-fruit-red"
               >
-                <MessageCircleIcon className="h-6 w-6" />
+                <img src={WhatsappIcn} className="h-6 w-6" />
               </a>
               {/* <a
                 href={`https://wa.me/${phone_num.config_value}?text=Hello%21%20I%20want%20to%20send%20an%20enquiry`}
@@ -202,7 +202,7 @@ export const Footer = () => {
         <div className="border-t mt-8 pt-8 text-center text-gray-600 flex flex-col md:flex-row items-center justify-between text-sm md:text-base gap-4 md:gap-0">
           <p>
             <span>
-              &copy; {new Date().getFullYear()} GrowPhal. All rights
+              &copy; {new Date().getFullYear()} GrowPhal Impex. All rights
               reserved.&nbsp;&nbsp;
             </span>
           </p>

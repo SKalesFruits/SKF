@@ -1,12 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 // import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  MessageCircle,
-  X,
-  RefreshCcwIcon,
-  MessageCircleIcon,
-} from "lucide-react";
+import { MessageCircle, X, RefreshCcwIcon } from "lucide-react";
+import WhatsappIcn from "./whatsapp_icn.svg";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getConfigDetailsFromDB } from "../data/config";
@@ -243,7 +239,7 @@ export const Chatbot = () => {
                     )
                   }
                 >
-                  <MessageCircleIcon className="h-5 w-5" />
+                  <img src={WhatsappIcn} className="h-6 w-6" />
                 </button>
                 <button onClick={handleResetChat}>
                   <RefreshCcwIcon className="h-5 w-5" />
