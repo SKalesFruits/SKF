@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  BarChart3,
-  Package,
-  Coins,
-  IndianRupeeIcon,
-} from "lucide-react";
+import { BarChart3, Package, Coins, IndianRupeeIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Order, Product, StatsData } from "../types";
 import { products } from "../data/products";

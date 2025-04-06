@@ -17,6 +17,7 @@ interface Product {
 export const Inventory: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [newProduct, setNewProduct] = useState<Product>({
     name: "",
@@ -50,6 +51,29 @@ export const Inventory: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "unsigned_upload");
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDNAME}/image/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await res.json();
+    setImageUrl(data.secure_url); // this is the image link
+    setNewProduct((prev) => ({
+      ...prev,
+      image: data.secure_url,
+    }));
   };
 
   const handleInputChange = (
@@ -162,18 +186,21 @@ export const Inventory: React.FC = () => {
           onChange={handleInputChange}
           className="p-2 border rounded w-full mb-2"
         />
-        <input
-          type="text"
-          name="image"
-          placeholder="Image URL"
-          value={newProduct.image}
-          onChange={handleInputChange}
-          className="p-2 border rounded w-full mb-2"
-        />
+        <input type="file" accept="image/*" onChange={handleImageUpload} />
+        {imageUrl && (
+          <input
+            type="text"
+            name="image"
+            placeholder="Image URL"
+            value={imageUrl}
+            // onChange={handleInputChange}
+            className="p-2 border rounded w-full mb-2"
+          />
+        )}
         <input
           type="text"
           name="category"
-          placeholder="Category"
+          placeholder="tropical / berries / core / exotic"
           value={newProduct.category}
           onChange={handleInputChange}
           className="p-2 border rounded w-full mb-2"

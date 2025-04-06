@@ -80,7 +80,7 @@ export const Cart = () => {
         key: "rzp_test_4dogS15wIJLRlF",
         amount: data.amount * 100,
         currency: data.currency,
-        name: "Fruit E-commerce",
+        name: "GrowPhal",
         description: "Order Payment",
         order_id: data.orderId,
         handler: async function (response: any) {
