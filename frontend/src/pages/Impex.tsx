@@ -189,7 +189,7 @@ export const Impex = () => {
                 {
                   icon: "🧾",
                   title: "GST Details",
-                  description: "1234567789909",
+                  description: "27KDLPK6248A1ZC",
                 },
                 {
                   icon: "👥",
