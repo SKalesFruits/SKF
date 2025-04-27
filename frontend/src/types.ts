@@ -10,6 +10,28 @@ export interface Product {
   stock?: number;
   buying_price: number;
   popularity: number;
+  productcategory?: string;
+}
+
+export interface ProductSave {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  category: string;
+  description: string;
+  seasonal: boolean;
+  organic: boolean;
+  stock?: number;
+  buying_price: number;
+  popularity: number;
+  productcategories?: Array<Category>;
+}
+
+interface Category {
+  id: number;
+  name: string;
+  value: string;
 }
 
 export interface StatsData {

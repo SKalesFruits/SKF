@@ -18,6 +18,7 @@ export const OrdersAdmin = () => {
   const [date, setDate] = useState("");
   const [address, setAddress] = useState("");
   const [orderLocation, setOrderLocation] = useState("");
+  const [items, setItems] = useState<Array<string>>([]);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -43,6 +44,7 @@ export const OrdersAdmin = () => {
     setOrderLocation(orderDetails.orderLocation);
     setAddress(orderDetails.orderAddress);
     setCurrentOrderStatus(orderDetails.currentStatus);
+    setItems(orderDetails.items);
   };
 
   const validateAndProceed = async () => {
@@ -128,10 +130,18 @@ export const OrdersAdmin = () => {
               value={customerName}
               readOnly
             />
+            <input
+              placeholder="Enter full address"
+              className="w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              value={new Date(date).toLocaleString("en-IN", {
+                timeZone: "Asia/Kolkata",
+              })}
+              readOnly
+            />
             <textarea
               placeholder="Enter full address"
               className="w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-              value={date}
+              value={items.map((item) => item)}
               readOnly
             />
             <div className="flex justify-end space-x-3">

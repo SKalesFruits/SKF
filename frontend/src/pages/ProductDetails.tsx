@@ -9,15 +9,18 @@ import {
   Leaf,
   Sun,
   Package,
+  ChevronDown,
 } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { products } from "../data/products";
 import { reviews } from "../data/reviews";
 import { calculateDiscountedPrice } from "../utils/price";
 import { RelatedProducts } from "../components/RelatedProducts";
-import { Product, Reviews } from "../types";
+import { Product, ProductSave, Reviews } from "../types";
 import { ExploreMoreProducts } from "../components/ExploreMoreProducts";
 import toast from "react-hot-toast";
+
+// Mock categories data - replace with API data later
 
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,15 +29,19 @@ export const ProductDetails = () => {
   const [quantityEnq, setQuantityEnq] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [items, setItems] = useState<Product[]>([]);
+  const [items, setItems] = useState<ProductSave[]>([]);
   const [reviewsList, setReviewsList] = useState<Reviews[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [measurementUnit, setMeasurementUnit] = useState("Kgs");
   const [mobileNumber, setMobileNumberEnq] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
   let productSelected = "";
+
   useEffect(() => {
     const getProducts = async () => {
       const res = await products();
@@ -44,6 +51,13 @@ export const ProductDetails = () => {
     };
     getProducts();
   }, []);
+
+  useEffect(() => {
+    if (product) {
+      setSelectedCategory(product.category || "fruits");
+    }
+  }, [id]);
+  const categories_for_product = items.find((item) => item.id === Number(id));
   const reviews_exist = reviewsList.find(
     (item) => item.product_id === Number(id)
   );
@@ -62,7 +76,12 @@ export const ProductDetails = () => {
   const handleAddToCart = () => {
     dispatch({
       type: "ADD_TO_CART",
-      payload: { ...product, price: discountedPrice, quantity },
+      payload: {
+        ...product,
+        price: discountedPrice,
+        quantity,
+        productcategory: selectedCategory === "" ? "SM" : selectedCategory,
+      },
     });
   };
 
@@ -86,7 +105,7 @@ export const ProductDetails = () => {
       );
       if (response.status === 201) {
         toast.success("Enquiry Sent!", {
-          duration: 5000, // Optional: controls how long the toast stays
+          duration: 5000,
           position: "top-right",
           style: {
             background: "#4CAF50",
@@ -100,7 +119,7 @@ export const ProductDetails = () => {
       console.error(err);
       setIsModalOpen(false);
       toast.error("Enquiry Failed!", {
-        duration: 5000, // Optional: controls how long the toast stays
+        duration: 5000,
         position: "top-right",
         style: {
           background: "#FF0000",
@@ -197,6 +216,94 @@ export const ProductDetails = () => {
               className="space-y-4 md:space-y-6"
             >
               <h1 className="text-2xl md:text-3xl font-bold">{product.name}</h1>
+
+              {/* Product Category Dropdown */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Select Size
+                </label>
+                <button
+                  type="button"
+                  className="relative w-full bg-white border border-gray-200 rounded-lg shadow-sm pl-3 pr-10 py-3 text-left cursor-default focus:outline-none focus:ring-2 focus:ring-fruit-red focus:border-fruit-red transition-all duration-200 hover:border-gray-300"
+                  onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                  aria-haspopup="listbox"
+                  aria-expanded={isCategoryOpen}
+                >
+                  {categories_for_product?.productcategories && (
+                    <span className="flex items-center">
+                      <span className="ml-3 block truncate text-gray-800">
+                        {categories_for_product?.productcategories.find(
+                          (c) => c.value === selectedCategory
+                        )?.name || "Select size"}
+                      </span>
+                    </span>
+                  )}
+                  <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                    <ChevronDown
+                      className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${
+                        isCategoryOpen ? "transform rotate-180" : ""
+                      }`}
+                    />
+                  </span>
+                </button>
+
+                {isCategoryOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-lg py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm max-h-60"
+                  >
+                    {categories_for_product?.productcategories &&
+                      categories_for_product?.productcategories.map(
+                        (category) => (
+                          <div
+                            key={category.id}
+                            className={`cursor-default select-none relative py-3 pl-3 pr-9 hover:bg-fruit-red/10 ${
+                              selectedCategory === category.value
+                                ? "bg-fruit-red/5"
+                                : ""
+                            }`}
+                            onClick={() => {
+                              setSelectedCategory(category.value);
+                              setIsCategoryOpen(false);
+                            }}
+                          >
+                            <div className="flex items-center">
+                              <span
+                                className={`ml-3 block truncate ${
+                                  selectedCategory === category.value
+                                    ? "font-medium text-fruit-red"
+                                    : "font-normal text-gray-900"
+                                }`}
+                              >
+                                {category.name}
+                              </span>
+                            </div>
+                            {selectedCategory === category.value && (
+                              <span className="text-fruit-red absolute inset-y-0 right-0 flex items-center pr-4">
+                                <svg
+                                  className="h-5 w-5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                            )}
+                          </div>
+                        )
+                      )}
+                  </motion.div>
+                )}
+              </div>
+
               <div className="flex flex-wrap items-center gap-2 md:gap-4">
                 <span className="text-gray-500 line-through text-lg md:text-xl">
                   ₹{product.price}

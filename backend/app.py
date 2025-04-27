@@ -3,6 +3,7 @@ from flask_cors import CORS
 from functions import *
 from config import *
 from bson import ObjectId
+from datetime import datetime, timezone
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -233,7 +234,7 @@ def verify_payment():
         order_data = {
             "orderId": data["razorpay_order_id"],
             "userName": data["userName"],
-            "dateOfOrderPlaced": datetime.utcnow().isoformat(),
+            "dateOfOrderPlaced": datetime.now(timezone.utc).isoformat(),
             "currentStatus": "pending",
             "orderLocation": data["orderLocation"],
             "orderAddress": data["orderAddress"],
@@ -258,19 +259,34 @@ def verify_payment():
 def add_product():
     data = request.get_json()
     product_collection = mongo_db["products"]
+
+    # Find the current maximum id in the collection
+    last_product = product_collection.find_one(sort=[("id", -1)])
+    next_id = last_product["id"] + 1 if last_product and "id" in last_product else 1
+
     new_product = {
+        "id": next_id,  # Auto-incremented id
         "name": data["name"],
         "price": data["price"],
         "image": data["image"],
         "category": data["category"],
         "description": data["description"],
-        "stock": data["stock"],
         "seasonal": data["seasonal"],
-        "organic": data["organic"]
+        "stock": data["stock"],
+        "organic": data["organic"],
+        "buying_price": data["buying_price"],
+        "popularity": 5,
+        "productcategories":data["productcategories"],
+        "createdAt": datetime.now(timezone.utc).isoformat(),
+        "updatedAt": datetime.now(timezone.utc).isoformat(),
+        "isActive": True
     }
-    inserted_product = product_collection.insert_one(new_product)
-    return jsonify({"message": "Product added successfully!", "id": str(inserted_product.inserted_id)}), 201
 
+    inserted_product = product_collection.insert_one(new_product)
+    return jsonify({
+        "message": "Product added successfully!",
+        "id": str(inserted_product.inserted_id)
+    }), 201
 
 # 🔹 Update a product
 @app.route("/api/products/<string:product_id>", methods=["PUT"])

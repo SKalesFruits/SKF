@@ -244,7 +244,7 @@ export const Home = () => {
                     Popular
                   </div>
                   <h3 className="text-xl font-semibold">{deal.name}</h3>
-                  <p className="text-green-600 font-bold">{deal.price}</p>
+                  <p className="text-green-600 font-bold">₹{deal.price}</p>
                 </div>
               ))}
           </div>

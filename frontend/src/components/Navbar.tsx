@@ -10,6 +10,7 @@ import LogoTwo from "./logotwo.png";
 import "./nav.css";
 import axios, { AxiosResponse } from "axios";
 import { UserDetails } from "../types";
+import { Helmet } from "react-helmet";
 
 export const Navbar = () => {
   const { state } = useCart();
@@ -61,6 +62,17 @@ export const Navbar = () => {
                 {/* <img src={Logo} id="logo-gr"></img> */}
                 {/* <img src={LogoOne} id="logo-gr"></img> */}
                 <img src={LogoTwo} id="logo-gr"></img>
+                <Helmet>
+                  <title>Growफल - Buy Fresh Fruits Online</title>
+                  <meta
+                    name="description"
+                    content="Buy fresh fruits online, Organic fruits home delivery, Seasonal fruits online India, Best quality fruits near me, Fresh fruit shop online, Order fruits online India, Fruit basket delivery India, Exotic fruits online shopping, Premium fruits delivery, Affordable fruits online, Buy fresh mangoes online, Organic mangoes home delivery, Mangoes online India, Best mangoes to buy online, Premium Alphonso mangoes, Fresh Alphonso mangoes delivery, Natural ripened mangoes online, Authentic Haapus mangoes, Ratnagiri mangoes online, Devgad Alphonso mangoes online"
+                  />
+                  <meta
+                    name="keywords"
+                    content="Order mango box online, Buy Kokan mangoes online, Kokan haapus mangoes, Original Kokan haapus, Devgad haapus mangoes online, Ratnagiri haapus mangoes, Real Alphonso mangoes from Kokan, Fresh Kokan mangoes delivered, Authentic Alphonso mango direct from farm, Premium Kokan mango box, Haapus mango online delivery Mumbai, Sweet Kokan Alphonso mangoes, Where to buy fresh Alphonso mangoes online, Best quality Haapus mangoes delivery Mumbai, Organic mango box online for gifting, Fresh farm-to-home mangoes India, How to identify real Alphonso mangoes, Buy summer fruits online India, Affordable mango delivery service near me"
+                  />
+                </Helmet>
                 {/* <p>
                   <span>Grow</span>
                   <span>फल</span>

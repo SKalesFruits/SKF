@@ -96,7 +96,10 @@ export const Cart = () => {
                 orderAddress: orderAddress,
                 totalOrderAmount: state.total,
                 items: state.items.map(
-                  (item) => `${item.name} ( x ${item.quantity})`
+                  (item) =>
+                    `${item.name + " [" + item.productcategory + "]"} ( x ${
+                      item.quantity
+                    })`
                 ),
                 itemList: state.items,
               }
@@ -178,7 +181,7 @@ export const Cart = () => {
                 />
                 <div className="ml-6 flex-1">
                   <h3 className="text-xl font-semibold text-gray-700">
-                    {item.name}
+                    {item.name + " [" + item.productcategory + "]"}
                   </h3>
                   <p className="text-gray-500 mt-1">₹{item.price}</p>
                 </div>

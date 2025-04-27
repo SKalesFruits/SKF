@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { ProductCard } from "../components/ProductCard";
 import { products, categories } from "../data/products";
-import { FilterState, Product } from "../types";
+import { FilterState, ProductSave } from "../types";
 
 export const Shop = () => {
   const [filters, setFilters] = useState<FilterState>({
     category: "all",
     seasonal: false,
     organic: false,
-    priceRange: [0, 500],
+    priceRange: [0, 2000],
   });
-  const [items, setItems] = useState<Product[]>([]);
+  const [items, setItems] = useState<ProductSave[]>([]);
   useEffect(() => {
     const getProducts = async () => {
       const res = await products();
@@ -93,7 +93,7 @@ export const Shop = () => {
               <input
                 type="range"
                 min="0"
-                max="500"
+                max="2000"
                 value={filters.priceRange[1]}
                 onChange={(e) =>
                   setFilters((prev) => ({

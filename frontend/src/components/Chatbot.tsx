@@ -234,7 +234,7 @@ export const Chatbot = () => {
                 <button
                   onClick={() =>
                     window.open(
-                      `https://wa.me/${phone_num.config_value}?text=Hello%21%20I%20want%20to%20send%20an%20enquiry`,
+                      `https://wa.me/${phone_num.config_value}?text=Hello%20Growphal%2C%20I%20want%20to%20send%20an%20enquiry%21`,
                       "_blank"
                     )
                   }

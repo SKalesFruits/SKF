@@ -41,14 +41,14 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
           )}
 
           <div className="py-1">
-            <Link
+            {/* <Link
               to="/profile"
               onClick={onClose}
               className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               <Settings className="h-4 w-4 mr-2" />
               Edit Profile
-            </Link>
+            </Link> */}
             <Link
               to="/orders"
               onClick={onClose}

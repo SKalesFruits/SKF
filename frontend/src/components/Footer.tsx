@@ -160,7 +160,7 @@ export const Footer = () => {
                 <Linkedin className="h-6 w-6" />
               </a>
               <a
-                href={`https://wa.me/${phone_num}?text=Hello%21%20I%20want%20to%20send%20an%20enquiry`}
+                href={`https://wa.me/${phone_num}?text=Hello%20Growphal%2C%20I%20want%20to%20send%20an%20enquiry%21`}
                 className="text-gray-600 hover:text-fruit-red"
               >
                 <img src={WhatsappIcn} className="h-6 w-6" />

@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+interface Category {
+  name: string;
+  value: string;
+}
+
 interface Product {
   _id?: string;
   name: string;
@@ -12,6 +17,7 @@ interface Product {
   stock: number;
   seasonal: boolean;
   organic: boolean;
+  productcategories?: Category[];
 }
 
 export const Inventory: React.FC = () => {
@@ -19,6 +25,7 @@ export const Inventory: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [productCategories, setProductCategories] = useState<Category[]>([]);
   const [newProduct, setNewProduct] = useState<Product>({
     name: "",
     price: 0,
@@ -33,7 +40,7 @@ export const Inventory: React.FC = () => {
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-
+  const [categoryCount, setCategoryCount] = useState<number>(0);
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -51,6 +58,37 @@ export const Inventory: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCategoryCountChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const count = parseInt(e.target.value) || 0;
+    setCategoryCount(count);
+
+    // Initialize or trim categories array based on count
+    if (count > productCategories.length) {
+      const newCategories = [...productCategories];
+      while (newCategories.length < count) {
+        newCategories.push({ name: "", value: "" });
+      }
+      setProductCategories(newCategories);
+    } else {
+      setProductCategories(productCategories.slice(0, count));
+    }
+  };
+
+  const handleCategoryChange = (
+    index: number,
+    field: keyof Category,
+    value: string
+  ) => {
+    const updatedCategories = [...productCategories];
+    updatedCategories[index] = {
+      ...updatedCategories[index],
+      [field]: value,
+    };
+    setProductCategories(updatedCategories);
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,11 +134,18 @@ export const Inventory: React.FC = () => {
 
   const addProduct = async () => {
     try {
+      console.log(productCategories);
+      const productToAdd = {
+        ...newProduct,
+        productcategories:
+          productCategories.length > 0 ? productCategories : undefined,
+      };
+      console.log(productCategories);
       const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}/api/products`,
-        newProduct
+        productToAdd
       );
-      setProducts([...products, { ...newProduct, _id: response.data.id }]);
+      setProducts([...products, { ...productToAdd, _id: response.data.id }]);
       setNewProduct({
         name: "",
         price: 0,
@@ -112,6 +157,8 @@ export const Inventory: React.FC = () => {
         seasonal: false,
         organic: false,
       });
+      setProductCategories([]);
+      setCategoryCount(0);
     } catch (err) {
       setError("Failed to add product");
     }
@@ -238,6 +285,39 @@ export const Inventory: React.FC = () => {
           />{" "}
           Organic
         </label>
+        <div className="mb-4">
+          <label className="block mb-2">Number of Categories:</label>
+          <input
+            type="number"
+            min="0"
+            value={categoryCount}
+            onChange={handleCategoryCountChange}
+            className="p-2 border rounded w-full mb-4"
+          />
+
+          {productCategories.map((category, index) => (
+            <div key={index} className="grid grid-cols-3 gap-2 mb-2">
+              <input
+                type="text"
+                placeholder={`Category Name ${index + 1}`}
+                value={category.name}
+                onChange={(e) =>
+                  handleCategoryChange(index, "name", e.target.value)
+                }
+                className="p-2 border rounded"
+              />
+              <input
+                type="text"
+                placeholder={`Category Value ${index + 1}`}
+                value={category.value}
+                onChange={(e) =>
+                  handleCategoryChange(index, "value", e.target.value)
+                }
+                className="p-2 border rounded"
+              />
+            </div>
+          ))}
+        </div>
         <button
           onClick={addProduct}
           className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
@@ -318,6 +398,18 @@ export const Inventory: React.FC = () => {
               onChange={handleInputChange}
               className="p-2 border rounded w-full mb-2"
             />
+            {selectedProduct.productcategories && (
+              <div className="mb-4">
+                <h3 className="font-bold mb-2">Product Categories:</h3>
+                <ul className="list-disc pl-5">
+                  {selectedProduct.productcategories.map((cat, index) => (
+                    <li key={index}>
+                      {cat.name} ({cat.value})
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <button
               onClick={updateProduct}
               className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { Product } from "../types";
+import { Product, ProductSave } from "../types";
 import {
   ShoppingCart,
   Leaf,
@@ -15,17 +15,24 @@ import {
 import { calculateDiscountedPrice } from "../utils/price";
 
 interface ProductCardProps {
-  product: Product;
+  product: ProductSave;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { dispatch, state } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const discountedPrice = calculateDiscountedPrice(product.price);
   const gradientClass = `${product.category}-gradient`;
   const discountPercentage = Math.round(
     ((product.price - discountedPrice) / product.price) * 100
   );
+
+  const categories_for_product = product.productcategories;
+
+  const handleChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(e.target.value);
+  };
 
   // Check if product is in cart and set initial quantity
   useEffect(() => {
@@ -38,7 +45,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleAddToCart = () => {
     dispatch({
       type: "ADD_TO_CART",
-      payload: { ...product, price: discountedPrice, quantity },
+      payload: {
+        ...product,
+        price: discountedPrice,
+        quantity,
+        productcategory: selectedCategory === "" ? "SM" : selectedCategory,
+      },
     });
   };
   const stock = product.stock ?? 0;
@@ -144,7 +156,39 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             )
           )}
         </div>
-
+        {/* Product Category */}
+        <div className="flex items-center gap-4 mb-4">
+          <span className="text-gray-500 text-sm font-medium">Size</span>
+          <div className="flex-1 relative">
+            <select
+              onChange={handleChangeCategory}
+              className="w-full p-2 pl-3 pr-8 text-sm rounded-lg border border-gray-300 focus:border-fruit-red focus:ring-2 focus:ring-fruit-red/20 appearance-none bg-white cursor-pointer transition-all"
+              value={selectedCategory}
+            >
+              {categories_for_product &&
+                categories_for_product.map((category) => (
+                  <option key={category.id} value={category.value}>
+                    {category.name}
+                  </option>
+                ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <svg
+                className="h-4 w-4 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
         {/* Quantity Selector */}
         <div className="flex items-center gap-4 mb-4">
           <div className="flex items-center border rounded-lg">
