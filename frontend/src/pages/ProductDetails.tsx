@@ -20,8 +20,6 @@ import { Product, ProductSave, Reviews } from "../types";
 import { ExploreMoreProducts } from "../components/ExploreMoreProducts";
 import toast from "react-hot-toast";
 
-// Mock categories data - replace with API data later
-
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { dispatch } = useCart();
@@ -36,6 +34,7 @@ export const ProductDetails = () => {
   const [mobileNumber, setMobileNumberEnq] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [currentImage, setCurrentImage] = useState(""); // New state for storing the current image
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -52,16 +51,20 @@ export const ProductDetails = () => {
     getProducts();
   }, []);
 
+  const product = items.find((p) => p.id === Number(id));
+
   useEffect(() => {
     if (product) {
-      setSelectedCategory(product.category || "fruits");
+      // Set default category and image when product loads
+      setSelectedCategory(product.category || "SM");
+      setCurrentImage(product.image); // Set default image
     }
-  }, [id]);
+  }, [product]);
+
   const categories_for_product = items.find((item) => item.id === Number(id));
   const reviews_exist = reviewsList.find(
     (item) => item.product_id === Number(id)
   );
-  const product = items.find((p) => p.id === Number(id));
 
   if (!product) {
     return (
@@ -81,8 +84,32 @@ export const ProductDetails = () => {
         price: discountedPrice,
         quantity,
         productcategory: selectedCategory === "" ? "SM" : selectedCategory,
+        image: currentImage, // Use the current image in cart
       },
     });
+  };
+
+  // Handle category change - update image
+  const handleCategoryChange = (categoryValue: any) => {
+    setSelectedCategory(categoryValue);
+
+    // Find the selected category object
+    const selectedCategoryObj = categories_for_product?.productcategories?.find(
+      (c) => c.value === categoryValue
+    );
+
+    // Update image if category has an image, otherwise keep the default product image
+    if (selectedCategoryObj && selectedCategoryObj.image) {
+      setCurrentImage(
+        selectedCategoryObj.image === ""
+          ? product.image
+          : selectedCategoryObj.image
+      );
+    } else {
+      setCurrentImage(product.image);
+    }
+
+    setIsCategoryOpen(false);
   };
 
   const sendEnquiry = async () => {
@@ -100,6 +127,7 @@ export const ProductDetails = () => {
             email: email,
             mobile: mobileNumber,
             enquiry: `Enquiring for Product: ${product.name}. Quantity Required :${quantityEnq} ${measurementUnit}`,
+            category: selectedCategory, // Include selected category in enquiry
           }),
         }
       );
@@ -203,9 +231,10 @@ export const ProductDetails = () => {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
+              key={currentImage} // Add key to re-render when image changes
             >
               <img
-                src={product.image}
+                src={currentImage}
                 alt={product.name}
                 className="w-full h-[300px] md:h-[400px] object-cover"
               />
@@ -265,10 +294,7 @@ export const ProductDetails = () => {
                                 ? "bg-fruit-red/5"
                                 : ""
                             }`}
-                            onClick={() => {
-                              setSelectedCategory(category.value);
-                              setIsCategoryOpen(false);
-                            }}
+                            onClick={() => handleCategoryChange(category.value)}
                           >
                             <div className="flex items-center">
                               <span

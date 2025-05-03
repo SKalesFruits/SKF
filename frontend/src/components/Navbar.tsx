@@ -41,7 +41,10 @@ export const Navbar = () => {
       setIsAdmin(response.data.is_admin);
     };
     console.log(localStorage.getItem("logged_in_user"));
-    if (localStorage.getItem("logged_in_user") !== null) {
+    if (
+      localStorage.length > 0 &&
+      localStorage.getItem("logged_in_user") !== null
+    ) {
       setUserAuthenticated(true);
       check_admin_status();
     }
@@ -159,11 +162,13 @@ export const Navbar = () => {
                     </div>
                   )}
                 </button>
-                <UserProfileDropdown
-                  authenticatedFlag={authenticated}
-                  isOpen={isProfileOpen}
-                  onClose={() => setIsProfileOpen(false)}
-                />
+                {localStorage.length > 0 && (
+                  <UserProfileDropdown
+                    authenticatedFlag={false}
+                    isOpen={isProfileOpen}
+                    onClose={() => setIsProfileOpen(false)}
+                  />
+                )}
               </div>
             </div>
           </div>

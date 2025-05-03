@@ -79,18 +79,20 @@ export const AuthForm = () => {
         localStorage.setItem(
           "logged_in_user_city",
           orderLocation !== "" ? orderLocation : response.data["user_city"]
-        );
+        ); 
 
-        toast.success(
-          `Welcome ${localStorage.getItem("logged_in_user") || "User"}!`,
-          {
-            duration: 5000,
-            position: "top-right",
-            style: { background: "#4287f5", color: "#fff" },
-            icon: "🤝",
-          }
-        );
-        navigate("/");
+        setTimeout(() => {
+          toast.success(
+            `Welcome ${localStorage.getItem("logged_in_user") || "User"}!`,
+            {
+              duration: 5000,
+              position: "top-right",
+              style: { background: "#4287f5", color: "#fff" },
+              icon: "🤝",
+            }
+          );
+          window.location.assign("/");
+        }, 3000);
       }
     } catch (error) {
       toast.error("Invalid credentials or email already registered!", {
